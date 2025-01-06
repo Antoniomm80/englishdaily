@@ -35,5 +35,5 @@ GPASSWORD=WCP4P9pbEnVNuQAALfB4" -- psql -h pgvector -U postgres`
 
 ### Useful meta-commands
 
-`\l` Equivalent to MySql SHOW DATABASES
-`\dt schema_name.*` Equivalent to MySql SHOW TABLES from schema_name database
+- `\l` Equivalent to MySql SHOW DATABASES
+- `\dt schema_name.*` Equivalent to MySql SHOW TABLES from schema_name database
