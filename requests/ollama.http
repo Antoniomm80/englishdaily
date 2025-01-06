@@ -1,0 +1,7 @@
+## Sample embedding generation with nomic
+POST http://localhost:11434/api/embeddings
+
+{
+"model": "nomic-embed-text",
+"prompt": "The sky is blue because of Rayleigh scattering"
+}
