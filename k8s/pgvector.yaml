@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: pgvector
+    role: db
+  name: pgvector
+  namespace: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgvector
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: pgvector
+    spec:
+      containers:
+      - image: pgvector/pgvector:pg16
+        name: pgvector
+        resources: {}
+        env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pgvectorpass
+                key: rootpass
+        ports:
+          - containerPort: 5432
+        volumeMounts:
+          - name: pgvectordb-storage
+            mountPath: /var/lib/postgresql/data
+      nodeSelector:
+        hostType: db
+      volumes:
+        - name: pgvectordb-storage
+          persistentVolumeClaim:
+            claimName: pgvectordb-pvc
+status: {}
