@@ -17,6 +17,6 @@ class FolderReaderTest {
         List<Path> testDocuments = folderReader.getFilenamesFromFolder("documents");
 
         assertThat(testDocuments).isNotEmpty()
-                                 .hasSize(2);
+                                 .hasSize(18);
     }
 }

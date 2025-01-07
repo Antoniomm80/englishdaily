@@ -17,6 +17,11 @@ PGVector database running in a Raspberry-Pi powered K8s cluster for storing PDFs
 
 # Help
 
+## Docker
+
+Maven command for building docker image with spring boot plugin
+`mvn spring-boot:build-image -Dspring-boot.build-image.imageName=192.168.4.30:5000/englishdaily:latest`
+
 ## PgVector
 
 ### Postgres client management in Kubernetes
