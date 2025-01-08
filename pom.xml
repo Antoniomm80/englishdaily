@@ -87,6 +87,12 @@
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.teketik</groupId>
+            <artifactId>mock-in-bean</artifactId>
+            <version>boot2-v1.8</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
