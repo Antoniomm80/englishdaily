@@ -1,1 +1,5 @@
 POST http://controlplane.local/english-daily/api/v1/englishdaily/vector-store
+
+###
+
+GET http://controlplane.local/english-daily/api/v1/englishdaily/vocabulary

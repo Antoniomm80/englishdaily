@@ -7,14 +7,14 @@ import org.springframework.ai.transformer.splitter.TextSplitter;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.core.io.PathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-class IngestionPipeline {
+@Service
+public class IngestionPipeline {
     private final VectorStore vectorStore;
     private final TextSplitter textSplitter;
     private final FolderReader folderReader;
@@ -25,7 +25,7 @@ class IngestionPipeline {
         this.folderReader = folderReader;
     }
 
-    void populateVectorStore() {
+    public void populateVectorStore() {
         List<Document> documents = new ArrayList<>();
 
         // Specify the folder path
