@@ -23,6 +23,7 @@ class VocabularyServiceTest {
     @Test
     void ingestionPipelineShouldIterateThroughDocumentsFolder() {
         String dailyVocabulary = vocabularyService.getDailyVocabulary();
+        System.out.println(dailyVocabulary);
         assertThat(dailyVocabulary).isNotBlank();
     }
 }
