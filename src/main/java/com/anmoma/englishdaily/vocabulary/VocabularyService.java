@@ -1,7 +1,6 @@
 package com.anmoma.englishdaily.vocabulary;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,19 +26,15 @@ public class VocabularyService {
     private static final String USER_REQUEST = "Provide me with a random vocabulary word from the vocabulary bank sections from the PDFs set, along with its definition, part of speech, pronunciation, and an example sentence. If applicable, include common collocations or synonyms for additional context.Please return the information in JSON format ready to be processed. The JSON fields must be named as follows: word, definition, partOfSpeech, pronunciation, exampleSentence, collocations, synonyms. ";
     @Autowired
     private ChatClient chatClient;
-    @Autowired
-    private RetrievalAugmentationAdvisor ragAdvisor;
 
     public VocabularyTerm getDailyVocabulary() {
         var outputConverter = new BeanOutputConverter<>(VocabularyTerm.class);
-        VocabularyTerm response = chatClient.prompt(SYSTEM_PROMPT)
-                                            .advisors(ragAdvisor)
-                                            .user(USER_REQUEST)
-                                            .options(OllamaOptions.builder()
-                                                                  .withFormat("json")
-                                                                  .build())
-                                            .call()
-                                            .entity(outputConverter);
-        return response;
+        return chatClient.prompt(SYSTEM_PROMPT)
+                         .user(USER_REQUEST)
+                         .options(OllamaOptions.builder()
+                                               .withFormat("json")
+                                               .build())
+                         .call()
+                         .entity(outputConverter);
     }
 }

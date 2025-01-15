@@ -3,11 +3,9 @@ package com.anmoma.englishdaily;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.TextReader;
 import org.springframework.ai.transformer.splitter.TextSplitter;
-import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +41,6 @@ public class PlainTextEmbeddingGenerationTest {
         assertThat(result).isNotEmpty();
 
         String response = chatClient.prompt()
-                                    .advisors(new QuestionAnswerAdvisor(vectorStore, SearchRequest.defaults()))
                                     .user("¿Como era el protagonista de nuestra historia?")
                                     .call()
                                     .content();
