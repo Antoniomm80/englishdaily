@@ -1,10 +1,12 @@
 package com.anmoma.englishdaily.vocabulary;
 
 import com.anmoma.englishdaily.IntegrationTest;
+import com.anmoma.englishdaily.LlmNotAvailableException;
 import com.teketik.test.mockinbean.MockInBean;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
@@ -25,7 +27,7 @@ class VocabularyControllerTest {
 
     @Test
     @DisplayName("Get a endpoint debe obtener ")
-    void givenGetToEndPointShouldInvokeServiceAndReturnAVocabularyResponse() throws Exception {
+    void givenGetToEndPointShouldInvokeServiceAndReturnAVocabularyResponse() {
         MockMvcTester mockMvcTester = MockMvcTester.create(mockMvc);
         given(vocabularyService.getDailyVocabulary()).willReturn(aRandomVocabularyTerm());
 
@@ -42,6 +44,16 @@ class VocabularyControllerTest {
                                                                                 entry("synonyms", List.of("the courage", "make oneself")));
         then(vocabularyService).should()
                                .getDailyVocabulary();
+    }
+
+    @Test
+    @DisplayName("Cuando Llama no está disponible debe devolver servicio no disponible")
+    void whenLlamaIsNotAvailableShouldReturnNotAvailable() {
+        MockMvcTester mockMvcTester = MockMvcTester.create(mockMvc);
+        given(vocabularyService.getDailyVocabulary()).willThrow(new LlmNotAvailableException("Llama not available"));
+
+        assertThat(mockMvcTester.get()
+                                .uri("/api/v1/englishdaily/vocabulary")).hasStatus(HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     private VocabularyTerm aRandomVocabularyTerm() {

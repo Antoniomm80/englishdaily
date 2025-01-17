@@ -1,10 +1,12 @@
 package com.anmoma.englishdaily.vocabulary;
 
+import com.anmoma.englishdaily.LlmNotAvailableException;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 @Service
 public class VocabularyService {
@@ -28,13 +30,18 @@ public class VocabularyService {
     private ChatClient chatClient;
 
     public VocabularyTerm getDailyVocabulary() {
-        var outputConverter = new BeanOutputConverter<>(VocabularyTerm.class);
-        return chatClient.prompt(SYSTEM_PROMPT)
-                         .user(USER_REQUEST)
-                         .options(OllamaOptions.builder()
-                                               .withFormat("json")
-                                               .build())
-                         .call()
-                         .entity(outputConverter);
+        try {
+            var outputConverter = new BeanOutputConverter<>(VocabularyTerm.class);
+            return chatClient.prompt(SYSTEM_PROMPT)
+                             .user(USER_REQUEST)
+                             .options(OllamaOptions.builder()
+                                                   .format("json")
+                                                   .temperature(0.5)
+                                                   .build())
+                             .call()
+                             .entity(outputConverter);
+        } catch (ResourceAccessException rae) {
+            throw new LlmNotAvailableException("Llama service is not available");
+        }
     }
 }
