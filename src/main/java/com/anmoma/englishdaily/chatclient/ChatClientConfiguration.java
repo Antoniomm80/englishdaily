@@ -1,10 +1,11 @@
 package com.anmoma.englishdaily.chatclient;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.RetrievalAugmentationAdvisor;
+import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.rag.retrieval.search.DocumentRetriever;
 import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,9 +13,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ChatClientConfiguration {
     @Bean
-    ChatClient chatClient(ChatClient.Builder builder, RetrievalAugmentationAdvisor ragAdvisor,
-            VectorStoreChatMemoryAdvisor vectorStoreChatMemoryAdvisor) {
-        return builder.defaultAdvisors(ragAdvisor, vectorStoreChatMemoryAdvisor)
+    ChatClient chatClient(ChatClient.Builder builder, QuestionAnswerAdvisor ragAdvisor) {
+        return builder.defaultAdvisors(ragAdvisor)
                       .build();
     }
 
@@ -26,12 +26,14 @@ public class ChatClientConfiguration {
                                            .build();
     }
 
-   /* @Bean
+    @Bean
     public QuestionAnswerAdvisor qaAdvisor(VectorStore vectorStore) {
-        return new QuestionAnswerAdvisor(vectorStore, SearchRequest.defaults()
-                                                                   .withSimilarityThreshold(0.50)
-                                                                   .withTopK(10));
-    }*/
+        return new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
+                                                                   .similarityThreshold(0.10)
+                                                                   .topK(15)
+                                                                   .build());
+
+    }
 
     @Bean
     public VectorStoreChatMemoryAdvisor vectorStoreChatMemoryAdvisor(VectorStore vectorStore) {
@@ -39,11 +41,16 @@ public class ChatClientConfiguration {
     }
 
     @Bean
+    public SimpleLoggerAdvisor simpleLoggerAdvisor() {
+        return new SimpleLoggerAdvisor();
+    }
+
+   /* @Bean
     public RetrievalAugmentationAdvisor ragAdvisor(DocumentRetriever documentRetriever) {
         return RetrievalAugmentationAdvisor.builder()
                                            .documentRetriever(documentRetriever)
 
                                            .build();
-    }
+    }*/
 
 }
