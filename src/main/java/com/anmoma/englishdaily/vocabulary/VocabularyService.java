@@ -46,17 +46,21 @@ public class VocabularyService {
 
     public VocabularyTerm getDailyVocabulary() {
         try {
-            var outputConverter = new BeanOutputConverter<>(VocabularyTerm.class);
-            return chatClient.prompt()
-                             .system(SYSTEM_PROMPT)
-                             .user(USER_REQUEST)
-                             .advisors(qaAdvisor(filenameProvider.getRandomFilenameFromDocumentsFolder()))
-                             .options(OllamaOptions.builder()
-                                                   .format("json")
-                                                   .temperature(0.5)
-                                                   .build())
-                             .call()
-                             .entity(outputConverter);
+            var outputConverter = new BeanOutputConverter<>(LlmVocabularyTerm.class);
+            String sourceDocument = filenameProvider.getRandomFilenameFromDocumentsFolder();
+            LlmVocabularyTerm llmGeneratedVocabularyTerm = chatClient.prompt()
+                                                                     .system(SYSTEM_PROMPT)
+                                                                     .user(USER_REQUEST)
+                                                                     .advisors(qaAdvisor(sourceDocument))
+                                                                     .options(OllamaOptions.builder()
+                                                                                           .format("json")
+                                                                                           .temperature(0.5)
+                                                                                           .build())
+                                                                     .call()
+                                                                     .entity(outputConverter);
+            return new VocabularyTerm(sourceDocument, llmGeneratedVocabularyTerm.word(), llmGeneratedVocabularyTerm.definition(),
+                    llmGeneratedVocabularyTerm.partOfSpeech(), llmGeneratedVocabularyTerm.pronunciation(),
+                    llmGeneratedVocabularyTerm.exampleSentence(), llmGeneratedVocabularyTerm.collocations(), llmGeneratedVocabularyTerm.synonyms());
         } catch (ResourceAccessException rae) {
             throw new LlmNotAvailableException("Llama service is not available");
         }

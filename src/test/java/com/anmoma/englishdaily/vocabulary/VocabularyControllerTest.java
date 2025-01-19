@@ -35,7 +35,8 @@ class VocabularyControllerTest {
                                 .uri("/api/v1/englishdaily/vocabulary")).bodyJson()
                                                                         .extractingPath("$")
                                                                         .asMap()
-                                                                        .contains(entry("word", "pluck"),
+                                                                        .contains(entry("source", "Slang Challenge (English with Lucy) 1.pdf"),
+                                                                                entry("word", "pluck"),
                                                                                 entry("definition", "to give yourself courage to do something"),
                                                                                 entry("partOfSpeech", "verb"), entry("pronunciation", "/plʌk/"),
                                                                                 entry("exampleSentence",
@@ -57,7 +58,7 @@ class VocabularyControllerTest {
     }
 
     private VocabularyTerm aRandomVocabularyTerm() {
-        return new VocabularyTerm("pluck", "to give yourself courage to do something", "verb", "/plʌk/",
+        return new VocabularyTerm("Slang Challenge (English with Lucy) 1.pdf", "pluck", "to give yourself courage to do something", "verb", "/plʌk/",
                 "We plucked up the courage to ask for a raise.", Collections.emptyList(), List.of("the courage", "make oneself"));
     }
 
