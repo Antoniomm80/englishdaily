@@ -1,4 +1,4 @@
-package com.anmoma.englishdaily.vectorstore;
+package com.anmoma.englishdaily.documentreader;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,8 +15,8 @@ class FolderReaderTest {
     @DisplayName("La lectura del directorio de pruebas debe devolver dos ficheros")
     void givenTestDocumentsFolderShouldReturnTwoFiles() {
         List<Path> testDocuments = folderReader.getFilenamesFromFolder("documents");
-
         assertThat(testDocuments).isNotEmpty()
-                                 .hasSize(18);
+                                 .hasSize(18)
+                                 .satisfiesOnlyOnce(p -> assertThat(p.toString()).contains("Slang Challenge (English with Lucy) 1.pdf"));
     }
 }

@@ -1,4 +1,4 @@
-package com.anmoma.englishdaily.vectorstore;
+package com.anmoma.englishdaily.documentreader;
 
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Component
-class FolderReader {
+public class FolderReader {
     public List<Path> getFilenamesFromFolder(String dir) {
         String path = FolderReader.class.getClassLoader()
                                         .getResource(dir)

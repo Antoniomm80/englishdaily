@@ -1,5 +1,6 @@
 package com.anmoma.englishdaily.vectorstore;
 
+import com.anmoma.englishdaily.documentreader.FolderReader;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
 import org.springframework.ai.reader.pdf.config.PdfDocumentReaderConfig;
@@ -39,7 +40,7 @@ public class IngestionPipeline {
                                                 .build();
             var pdfReader = new PagePdfDocumentReader(resource, config);
             List<Document> documentsToAdd = textSplitter.apply(pdfReader.get());
-            vectorStore.add(keywordEnricher.enrichDocuments(documentsToAdd));
+            vectorStore.add(documentsToAdd);
         });
     }
 
