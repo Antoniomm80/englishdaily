@@ -1,5 +1,5 @@
+### Populate vector store
 POST http://controlplane.local/english-daily/api/v1/englishdaily/vector-store
 
-###
-
+### Get daily vocabulary
 GET http://controlplane.local/english-daily/api/v1/englishdaily/vocabulary

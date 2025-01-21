@@ -48,6 +48,29 @@ class VocabularyControllerTest {
     }
 
     @Test
+    @DisplayName("La lista negra debe pasarse al servicio ")
+    void blackListShouldBeReadFromQueryParamAndPassItToService() {
+        MockMvcTester mockMvcTester = MockMvcTester.create(mockMvc);
+        given(vocabularyService.getDailyVocabulary(List.of("crash", "crush"))).willReturn(aRandomVocabularyTerm());
+
+        assertThat(mockMvcTester.get()
+                                .uri("/api/v1/englishdaily/vocabulary")
+                                .queryParam("blacklist", "crash")
+                                .queryParam("blacklist", "crush")).bodyJson()
+                                                                  .extractingPath("$")
+                                                                  .asMap()
+                                                                  .contains(entry("source", "Slang Challenge (English with Lucy) 1.pdf"),
+                                                                          entry("word", "pluck"),
+                                                                          entry("definition", "to give yourself courage to do something"),
+                                                                          entry("partOfSpeech", "verb"), entry("pronunciation", "/plʌk/"),
+                                                                          entry("exampleSentence", "We plucked up the courage to ask for a raise."),
+                                                                          entry("collocations", Collections.emptyList()),
+                                                                          entry("synonyms", List.of("the courage", "make oneself")));
+        then(vocabularyService).should()
+                               .getDailyVocabulary(List.of("crash", "crush"));
+    }
+
+    @Test
     @DisplayName("Cuando Llama no está disponible debe devolver servicio no disponible")
     void whenLlamaIsNotAvailableShouldReturnNotAvailable() {
         MockMvcTester mockMvcTester = MockMvcTester.create(mockMvc);

@@ -12,6 +12,8 @@ import org.springframework.ai.vectorstore.filter.Filter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
+import java.util.List;
+
 @Service
 public class VocabularyService {
     private static final String SYSTEM_PROMPT = """
@@ -28,6 +30,7 @@ public class VocabularyService {
             - abrv which stands for abbreviation
             - phr v which stands for phrasal verb
             
+            In order to avoid repetition please avoid returning one of the terms of this blacklist: {blackList}
             """;
     private static final String USER_REQUEST = """
             Get one random slang term from vocabulary bank, along with its definition, part of speech, pronunciation, and an example sentence. If applicable, include common collocations or synonyms for additional context. 
@@ -45,11 +48,16 @@ public class VocabularyService {
     }
 
     public VocabularyTerm getDailyVocabulary() {
+        return getDailyVocabulary(List.of());
+    }
+
+    public VocabularyTerm getDailyVocabulary(List<String> blacklist) {
         try {
             var outputConverter = new BeanOutputConverter<>(LlmVocabularyTerm.class);
             String sourceDocument = filenameProvider.getRandomFilenameFromDocumentsFolder();
             LlmVocabularyTerm llmGeneratedVocabularyTerm = chatClient.prompt()
-                                                                     .system(SYSTEM_PROMPT)
+                                                                     .system(sp -> sp.text(SYSTEM_PROMPT)
+                                                                                     .param("blackList", blacklist))
                                                                      .user(USER_REQUEST)
                                                                      .advisors(qaAdvisor(sourceDocument))
                                                                      .options(OllamaOptions.builder()

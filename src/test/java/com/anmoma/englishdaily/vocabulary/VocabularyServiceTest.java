@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @IntegrationTest
@@ -22,7 +24,7 @@ class VocabularyServiceTest {
 
     @Test
     void ingestionPipelineShouldIterateThroughDocumentsFolder() {
-        VocabularyTerm dailyVocabulary = vocabularyService.getDailyVocabulary();
+        VocabularyTerm dailyVocabulary = vocabularyService.getDailyVocabulary(List.of("yonks", "epic", "crush", "crash"));
         System.out.println(dailyVocabulary);
         assertThat(dailyVocabulary).isNotNull();
     }

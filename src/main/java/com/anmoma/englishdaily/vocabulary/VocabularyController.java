@@ -3,6 +3,7 @@ package com.anmoma.englishdaily.vocabulary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,8 +18,9 @@ class VocabularyController {
     }
 
     @GetMapping("vocabulary")
-    ResponseEntity<VocabularyResponse> getDailyVocabulary() {
-        return ResponseEntity.ok(new VocabularyResponse(vocabularyService.getDailyVocabulary()));
+    ResponseEntity<VocabularyResponse> getDailyVocabulary(@RequestParam(required = false) List<String> blacklist) {
+        VocabularyTerm dailyVocabulary = blacklist == null ? vocabularyService.getDailyVocabulary() : vocabularyService.getDailyVocabulary(blacklist);
+        return ResponseEntity.ok(new VocabularyResponse(dailyVocabulary));
     }
 
     record VocabularyResponse(String source, String word, String definition, String partOfSpeech, String pronunciation, String exampleSentence,
