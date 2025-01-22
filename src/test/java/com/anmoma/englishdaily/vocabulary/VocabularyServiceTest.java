@@ -4,6 +4,7 @@ import com.anmoma.englishdaily.IntegrationTest;
 import com.anmoma.englishdaily.vectorstore.IngestionPipeline;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -16,6 +17,8 @@ class VocabularyServiceTest {
     private IngestionPipeline ingestionPipeline;
     @Autowired
     private VocabularyService vocabularyService;
+    @Autowired
+    private VectorStore vectorStore;
 
     @BeforeEach
     void setUp() {

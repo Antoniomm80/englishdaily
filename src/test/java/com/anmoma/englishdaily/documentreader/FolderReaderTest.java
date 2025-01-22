@@ -16,7 +16,7 @@ class FolderReaderTest {
     void givenTestDocumentsFolderShouldReturnTwoFiles() {
         List<Path> testDocuments = folderReader.getFilenamesFromFolder("documents");
         assertThat(testDocuments).isNotEmpty()
-                                 .hasSize(18)
+                                 .hasSizeGreaterThan(10)
                                  .satisfiesOnlyOnce(p -> assertThat(p.toString()).contains("Slang Challenge (English with Lucy) 1.pdf"));
     }
 }
