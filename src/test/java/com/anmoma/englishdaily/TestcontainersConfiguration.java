@@ -1,8 +1,11 @@
 package com.anmoma.englishdaily;
 
+import com.corundumstudio.socketio.SocketIOServer;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
@@ -21,4 +24,9 @@ public class TestcontainersConfiguration {
         return new PostgreSQLContainer<>(DockerImageName.parse("pgvector/pgvector:pg16"));
     }
 
+    @Bean
+    @Primary
+    SocketIOServer socketIOServer() {
+        return Mockito.mock(SocketIOServer.class);
+    }
 }

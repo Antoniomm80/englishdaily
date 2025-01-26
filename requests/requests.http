@@ -3,3 +3,14 @@ POST http://controlplane.local/english-daily/api/v1/englishdaily/vector-store
 
 ### Get daily vocabulary
 GET http://controlplane.local/english-daily/api/v1/englishdaily/vocabulary
+
+### Ask llama
+POST http://controlplane.local/english-daily/api/v1/englishdaily/ask-llama
+Content-Type: application/json;charset=UTF-8
+
+{
+  "question": "Show me ten prhasal verbs related with family and relationships"
+}
+
+### Ask llama get
+GET http://controlplane.local/english-daily/api/v1/englishdaily/ask-llama?question=What is the name of the protagonist of the story
