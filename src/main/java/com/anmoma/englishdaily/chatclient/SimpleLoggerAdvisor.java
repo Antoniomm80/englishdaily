@@ -24,7 +24,8 @@ public class SimpleLoggerAdvisor implements CallAroundAdvisor, StreamAroundAdvis
     @Override
     public AdvisedResponse aroundCall(AdvisedRequest advisedRequest, CallAroundAdvisorChain chain) {
 
-        logger.info("BEFORE: {}", advisedRequest);
+        logger.info("BEFORE USER TEXT: {}", advisedRequest.userText());
+        logger.info("BEFORE SYSTEM TEXT: {}", advisedRequest.systemText());
 
         AdvisedResponse advisedResponse = chain.nextAroundCall(advisedRequest);
 

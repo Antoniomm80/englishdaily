@@ -4,6 +4,7 @@ import com.anmoma.englishdaily.LlmNotAvailableException;
 import com.anmoma.englishdaily.chatclient.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
+import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -12,10 +13,11 @@ import org.springframework.web.client.ResourceAccessException;
 import reactor.core.publisher.Flux;
 
 @Service
-@ConditionalOnProperty(value = "englishdaily.chat-service.llm-model", havingValue = "llama")
-public class AskLlamaService implements AskLlmService {
+@ConditionalOnProperty(value = "englishdaily.chat-service.llm-model", havingValue = "deepseek")
+public class AskDeepSeekService implements AskLlmService {
 
     private static final String SYSTEM_PROMPT = """
+            <context>
             You are an advanced AI language assistant designed to help users learn English effectively. Your primary objective is to deliver clear, accurate, and engaging daily lessons focused on vocabulary and grammar. 
             All content is derived from high-quality educational material extracted from PDF files.
             
@@ -37,13 +39,14 @@ public class AskLlamaService implements AskLlmService {
             For vocabulary, include word forms (e.g., noun, verb, adjective) and common collocations.
             Foster Engagement:
             Design prompts that encourage interaction and practice.
+            </context>
             """;
 
     private final VectorStore vectorStore;
     private final ChatClient chatClient;
     private final SimpleLoggerAdvisor simpleLoggerAdvisor;
 
-    public AskLlamaService(VectorStore vectorStore, ChatClient chatClient, SimpleLoggerAdvisor simpleLoggerAdvisor) {
+    public AskDeepSeekService(VectorStore vectorStore, ChatClient chatClient, SimpleLoggerAdvisor simpleLoggerAdvisor) {
         this.vectorStore = vectorStore;
         this.chatClient = chatClient;
         this.simpleLoggerAdvisor = simpleLoggerAdvisor;
@@ -52,10 +55,11 @@ public class AskLlamaService implements AskLlmService {
     @Override
     public Flux<String> ask(String userRequest) {
         try {
-            return chatClient.prompt()
-                             .system(SYSTEM_PROMPT)
-                             .user(userRequest)
+            return chatClient.prompt(SYSTEM_PROMPT + "<question>" + userRequest + "</question>")
                              .advisors(qaAdvisor(), simpleLoggerAdvisor)
+                             .options(OllamaOptions.builder()
+                                                   .temperature(0.4)
+                                                   .build())
                              .stream()
                              .content();
         } catch (ResourceAccessException rae) {

@@ -8,17 +8,17 @@ import reactor.core.publisher.Flux;
 @RestController
 @RequestMapping("api/v1/englishdaily")
 class AskLlamaController {
-    private final AskLlamaService askLlamaService;
+    private final AskLlmService askLlmService;
     private final SocketIOServer socketIOServer;
 
-    AskLlamaController(AskLlamaService askLlamaService, SocketIOServer socketIOServer) {
-        this.askLlamaService = askLlamaService;
+    AskLlamaController(AskLlmService askLlmService, SocketIOServer socketIOServer) {
+        this.askLlmService = askLlmService;
         this.socketIOServer = socketIOServer;
     }
 
     @PostMapping("ask-llama")
     ResponseEntity<Void> askLlama(@RequestBody AskLlamaRequest question) {
-        Flux<String> llmResponse = askLlamaService.ask(question.question);
+        Flux<String> llmResponse = askLlmService.ask(question.question);
         llmResponse.subscribe(message -> {
             socketIOServer.getBroadcastOperations()
                           .sendEvent("message", message);
@@ -29,7 +29,7 @@ class AskLlamaController {
 
     @GetMapping("ask-llama")
     ResponseEntity<Void> askLlamaSimple(@RequestParam String question) {
-        Flux<String> llmResponse = askLlamaService.ask(question);
+        Flux<String> llmResponse = askLlmService.ask(question);
         llmResponse.subscribe(message -> {
             socketIOServer.getBroadcastOperations()
                           .sendEvent("message", message);

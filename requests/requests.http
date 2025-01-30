@@ -13,4 +13,4 @@ Content-Type: application/json;charset=UTF-8
 }
 
 ### Ask llama get
-GET http://controlplane.local/english-daily/api/v1/englishdaily/ask-llama?question=What is the name of the protagonist of the story
+GET http://controlplane.local/english-daily/api/v1/englishdaily/ask-llama?question=what is the meaning of the idiom clock watcher
