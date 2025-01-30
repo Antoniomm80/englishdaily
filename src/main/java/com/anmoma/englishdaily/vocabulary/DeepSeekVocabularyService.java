@@ -71,9 +71,9 @@ public class DeepSeekVocabularyService implements VocabularyService {
             String sourceDocument = filenameProvider.getRandomFilenameFromDocumentsFolder();
 
             String llmGeneratedVocabularyTerm = chatClient.prompt(SYSTEM_PROMPT.replace("{blackList}", String.join(",", blacklist)) + USER_REQUEST)
-                                                          .advisors(qaAdvisor(sourceDocument), simpleLoggerAdvisor)
+                                                          .advisors(qaAdvisor(sourceDocument))
                                                           .options(OllamaOptions.builder()
-                                                                                .temperature(0.4)
+                                                                                .temperature(0.6)
                                                                                 .build())
                                                           .call()
                                                           .content();
