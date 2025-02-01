@@ -49,7 +49,6 @@ public class LlamaVocabularyService implements VocabularyService {
         this.vectorStore = vectorStore;
         this.chatClient = chatClient;
         this.filenameProvider = filenameProvider;
-
         this.simpleLoggerAdvisor = simpleLoggerAdvisor;
     }
 
