@@ -1,5 +1,6 @@
 package com.anmoma.englishdaily.documentreader;
 
+import com.anmoma.englishdaily.catalog.CourseRepository;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
@@ -8,17 +9,21 @@ import java.util.List;
 @Service
 public class FilenameProvider {
     private final FolderReader folderReader;
+    private final CourseRepository courseRepository;
 
-    public FilenameProvider(FolderReader folderReader) {
+    public FilenameProvider(FolderReader folderReader, CourseRepository courseRepository) {
         this.folderReader = folderReader;
+        this.courseRepository = courseRepository;
     }
 
     public String getRandomFilenameFromDocumentsFolder() {
-        List<String> documents = folderReader.getFilenamesFromFolder("documents")
-                                             .stream()
-                                             .map(Path::getFileName)
-                                             .map(Path::toString)
-                                             .toList();
+        List<String> documents = courseRepository.findAllVocabularySupportedCourses()
+                                                 .stream()
+                                                 .flatMap(course -> folderReader.getFilenamesFromFolder("documents/" + course.getFolderPath())
+                                                                                .stream())
+                                                 .map(Path::getFileName)
+                                                 .map(Path::toString)
+                                                 .toList();
         return documents.get((int) (Math.random() * documents.size()));
     }
 

@@ -1,1 +1,67 @@
 databaseChangeLog:
+  - changeSet:
+      id: 1
+      comment: Create table courses with id auto incremental, title, folder_path and vocabularySupported as boolean colum
+      author: amm
+      changes:
+        - createTable:
+            tableName: courses
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: title
+                  type: varchar(255)
+              - column:
+                  name: folder_path
+                  type: varchar(255)
+              - column:
+                  name: vocabulary_supported
+                  type: boolean
+  - changeSet:
+      id: 2
+      comment: Add courses catalog
+      author: amm
+      changes:
+        - insert:
+            tableName: courses
+            columns:
+              - column:
+                  name: title
+                  value: 'Advanced Grammar Challenge'
+              - column:
+                  name: folder_path
+                  value: 'advancedgrammarchallenge'
+              - column:
+                  name: vocabulary_supported
+                  value: false
+        - insert:
+            tableName: courses
+            columns:
+              - column:
+                  name: title
+                  value: 'Phrasal Verbs Challenge'
+              - column:
+                  name: folder_path
+                  value: 'phrasalverbschallenge'
+              - column:
+                  name: vocabulary_supported
+                  value: true
+        - insert:
+            tableName: courses
+            columns:
+              - column:
+                  name: title
+                  value: 'Slang Challenge'
+              - column:
+                  name: folder_path
+                  value: 'slangchallenge'
+              - column:
+                  name: vocabulary_supported
+                  value: true
+
+

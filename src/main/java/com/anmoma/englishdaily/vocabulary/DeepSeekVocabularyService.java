@@ -69,7 +69,8 @@ public class DeepSeekVocabularyService implements VocabularyService {
         try {
             String sourceDocument = filenameProvider.getRandomFilenameFromDocumentsFolder();
 
-            String llmGeneratedVocabularyTerm = chatClient.prompt(SYSTEM_PROMPT.replace("{blackList}", String.join(",", blacklist)) + USER_REQUEST)
+            String llmGeneratedVocabularyTerm = chatClient.prompt()
+                                                          .user(SYSTEM_PROMPT.replace("{blackList}", String.join(",", blacklist)) + USER_REQUEST)
                                                           .advisors(qaAdvisor(sourceDocument))
                                                           .options(OllamaOptions.builder()
                                                                                 .temperature(0.5)
@@ -86,7 +87,7 @@ public class DeepSeekVocabularyService implements VocabularyService {
     private QuestionAnswerAdvisor qaAdvisor(String filename) {
         Filter.Expression filterExpression = new Filter.Expression(Filter.ExpressionType.EQ, new Filter.Key("file_name"), new Filter.Value(filename));
         return new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
-                                                                   .similarityThreshold(0.10)
+                                                                   .similarityThreshold(0.60)
                                                                    .topK(6)
                                                                    .filterExpression(filterExpression)
                                                                    .build());
