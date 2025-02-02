@@ -1,6 +1,7 @@
 package com.anmoma.englishdaily.chatclient;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.chat.client.advisor.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.rag.retrieval.search.DocumentRetriever;
 import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
@@ -19,7 +20,8 @@ public class ChatClientConfiguration {
     public DocumentRetriever documentRetriever(VectorStore vectorStore) {
         return VectorStoreDocumentRetriever.builder()
                                            .vectorStore(vectorStore)
-                                           .similarityThreshold(0.7)
+                                           .similarityThreshold(0.60)
+                                           .topK(10)
                                            .build();
     }
 
@@ -33,12 +35,12 @@ public class ChatClientConfiguration {
         return new SimpleLoggerAdvisor();
     }
 
-   /* @Bean
+    @Bean
     public RetrievalAugmentationAdvisor ragAdvisor(DocumentRetriever documentRetriever) {
         return RetrievalAugmentationAdvisor.builder()
                                            .documentRetriever(documentRetriever)
 
                                            .build();
-    }*/
+    }
 
 }

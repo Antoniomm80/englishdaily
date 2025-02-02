@@ -1,4 +1,4 @@
-package com.anmoma.englishdaily.askllama;
+package com.anmoma.englishdaily.grammar;
 
 import com.anmoma.englishdaily.IntegrationTest;
 import com.corundumstudio.socketio.SocketIOServer;
@@ -6,36 +6,37 @@ import com.teketik.test.mockinbean.MockInBean;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import reactor.core.publisher.Flux;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @IntegrationTest
-class AskLlamaControllerTest {
+class GrammarControllerTest {
     @Autowired
     private MockMvc mockMvc;
+    @MockInBean(GrammarController.class)
+    private GrammarService grammarService;
     @Autowired
     private SocketIOServer socketIOServer;
-    @MockInBean(AskLlamaController.class)
-    private AskLlamaService askLlamaService;
 
     @Test
     @DisplayName("Debería devolver una respuesta de Llama")
     void givenPostRequestShouldInvokeLlama() throws Exception {
-        given(askLlamaService.ask("¿Cómo se llama el protagonista de la historia?")).willReturn(
-                Flux.just("El protagonista de la historia se llama", " Don Juan."));
-        mockMvc.perform(post("/api/v1/englishdaily/ask-llama").contentType(MediaType.APPLICATION_JSON)
-                                                              .content("{\"question\": \"¿Cómo se llama el protagonista de la historia?\"}"))
+        given(grammarService.generateGrammarLesson(GrammarLesson.CLEFT_SENTENCES)).willReturn(
+                Flux.just("Cleft sentences", "are used to emphasize a particular piece", "of new or important information."));
+
+        mockMvc.perform(get("/api/v1/englishdaily/grammar").param("grammarLesson", "CLEFT_SENTENCES"))
                .andExpect(status().isOk());
 
         then(socketIOServer.getBroadcastOperations()).should()
-                                                     .sendEvent("message", "El protagonista de la historia se llama");
+                                                     .sendEvent("message", "Cleft sentences");
         then(socketIOServer.getBroadcastOperations()).should()
-                                                     .sendEvent("message", " Don Juan.");
+                                                     .sendEvent("message", "are used to emphasize a particular piece");
+        then(socketIOServer.getBroadcastOperations()).should()
+                                                     .sendEvent("message", "of new or important information.");
     }
 }

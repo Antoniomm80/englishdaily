@@ -1,5 +1,6 @@
 package com.anmoma.englishdaily;
 
+import com.corundumstudio.socketio.BroadcastOperations;
 import com.corundumstudio.socketio.SocketIOServer;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -9,8 +10,10 @@ import org.springframework.context.annotation.Primary;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
+import static org.mockito.BDDMockito.given;
+
 @TestConfiguration(proxyBeanMethods = false)
-public class TestcontainersConfiguration {
+public class TestEnvironmentConfiguration {
 
     //    @Bean
     //    @ServiceConnection
@@ -26,7 +29,15 @@ public class TestcontainersConfiguration {
 
     @Bean
     @Primary
-    SocketIOServer socketIOServer() {
-        return Mockito.mock(SocketIOServer.class);
+    BroadcastOperations broadcastOperations() {
+        return Mockito.mock(BroadcastOperations.class);
+    }
+
+    @Bean
+    @Primary
+    SocketIOServer socketIOServer(BroadcastOperations broadcastOperations) {
+        SocketIOServer socketIOServer = Mockito.mock(SocketIOServer.class);
+        given(socketIOServer.getBroadcastOperations()).willReturn(broadcastOperations);
+        return socketIOServer;
     }
 }

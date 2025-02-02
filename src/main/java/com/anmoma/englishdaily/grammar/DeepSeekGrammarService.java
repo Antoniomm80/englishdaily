@@ -1,12 +1,10 @@
-package com.anmoma.englishdaily.askllama;
+package com.anmoma.englishdaily.grammar;
 
 import com.anmoma.englishdaily.LlmNotAvailableException;
 import com.anmoma.englishdaily.chatclient.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
+import org.springframework.ai.chat.client.advisor.RetrievalAugmentationAdvisor;
 import org.springframework.ai.ollama.api.OllamaOptions;
-import org.springframework.ai.vectorstore.SearchRequest;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -14,8 +12,7 @@ import reactor.core.publisher.Flux;
 
 @Service
 @ConditionalOnProperty(value = "englishdaily.chat-service.llm-model", havingValue = "deepseek")
-public class AskDeepSeekService implements AskLlmService {
-
+public class DeepSeekGrammarService implements GrammarService {
     private static final String SYSTEM_PROMPT = """
             <context>
             You are an advanced AI language assistant designed to help users learn English effectively. Your primary objective is to deliver clear, accurate, and engaging daily lessons focused on vocabulary and grammar. 
@@ -42,22 +39,23 @@ public class AskDeepSeekService implements AskLlmService {
             </context>
             """;
 
-    private final VectorStore vectorStore;
     private final ChatClient chatClient;
     private final SimpleLoggerAdvisor simpleLoggerAdvisor;
+    private final RetrievalAugmentationAdvisor ragAdvisor;
 
-    public AskDeepSeekService(VectorStore vectorStore, ChatClient chatClient, SimpleLoggerAdvisor simpleLoggerAdvisor) {
-        this.vectorStore = vectorStore;
+    public DeepSeekGrammarService(ChatClient chatClient, SimpleLoggerAdvisor simpleLoggerAdvisor, RetrievalAugmentationAdvisor ragAdvisor) {
+        this.ragAdvisor = ragAdvisor;
         this.chatClient = chatClient;
         this.simpleLoggerAdvisor = simpleLoggerAdvisor;
     }
 
     @Override
-    public Flux<String> ask(String userRequest) {
+    public Flux<String> generateGrammarLesson(GrammarLesson lesson) {
         try {
             return chatClient.prompt()
-                             .user(SYSTEM_PROMPT + "<question>" + userRequest + "</question>")
-                             .advisors(qaAdvisor(), simpleLoggerAdvisor)
+                             .user(SYSTEM_PROMPT + "<question> Prepare a lesson about " + lesson.getTitle() +
+                                     " based on the context extracted from the documents</question>")
+                             .advisors(ragAdvisor, simpleLoggerAdvisor)
                              .options(OllamaOptions.builder()
                                                    .temperature(0.4)
                                                    .build())
@@ -66,14 +64,6 @@ public class AskDeepSeekService implements AskLlmService {
         } catch (ResourceAccessException rae) {
             throw new LlmNotAvailableException("Llama service is not available");
         }
-    }
-
-    private QuestionAnswerAdvisor qaAdvisor() {
-        return new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
-                                                                   .similarityThreshold(0.70)
-                                                                   .topK(6)
-                                                                   .build());
-
     }
 
 }

@@ -6,7 +6,7 @@ public class TestEnglishdailyApplication {
 
     public static void main(String[] args) {
         SpringApplication.from(EnglishdailyApplication::main)
-                         .with(TestcontainersConfiguration.class)
+                         .with(TestEnvironmentConfiguration.class)
                          .run(args);
     }
 
