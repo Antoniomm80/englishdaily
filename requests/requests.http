@@ -15,5 +15,8 @@ Content-Type: application/json;charset=UTF-8
 ### Ask llama get
 GET http://controlplane.local/english-daily/api/v1/englishdaily/ask-llama?question=what is the meaning of the idiom clock watcher
 
+### get all Grammar Lesson
+GET http://controlplane.local/english-daily/api/v1/englishdaily/grammar-lessons
+
 ### Grammar Lesson
 GET http://controlplane.local/english-daily/api/v1/englishdaily/grammar?grammarLesson=CLEFT_SENTENCES

@@ -1,5 +1,6 @@
 package com.anmoma.englishdaily.grammar;
 
+import com.anmoma.englishdaily.catalog.GrammarLesson;
 import com.corundumstudio.socketio.SocketIOServer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

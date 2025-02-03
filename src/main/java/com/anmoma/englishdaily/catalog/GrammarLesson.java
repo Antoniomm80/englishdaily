@@ -1,4 +1,7 @@
-package com.anmoma.englishdaily.grammar;
+package com.anmoma.englishdaily.catalog;
+
+import java.util.Arrays;
+import java.util.List;
 
 public enum GrammarLesson {
     //@formatter:off
@@ -26,5 +29,9 @@ public enum GrammarLesson {
 
     public String getTitle() {
         return title;
+    }
+
+    public static List<GrammarLesson> findAll() {
+        return Arrays.asList(GrammarLesson.values());
     }
 }

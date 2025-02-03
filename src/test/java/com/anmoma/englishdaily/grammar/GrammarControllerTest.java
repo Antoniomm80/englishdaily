@@ -1,6 +1,7 @@
 package com.anmoma.englishdaily.grammar;
 
 import com.anmoma.englishdaily.IntegrationTest;
+import com.anmoma.englishdaily.catalog.GrammarLesson;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.teketik.test.mockinbean.MockInBean;
 import org.junit.jupiter.api.DisplayName;
