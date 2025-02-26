@@ -57,7 +57,7 @@ public class AskDeepSeekService implements AskLlmService {
         try {
             return chatClient.prompt()
                              .user(SYSTEM_PROMPT + "<question>" + userRequest + "</question>")
-                             .advisors(qaAdvisor(), simpleLoggerAdvisor)
+                             .advisors(qaAdvisor(userRequest), simpleLoggerAdvisor)
                              .options(OllamaOptions.builder()
                                                    .temperature(0.4)
                                                    .build())
@@ -68,8 +68,9 @@ public class AskDeepSeekService implements AskLlmService {
         }
     }
 
-    private QuestionAnswerAdvisor qaAdvisor() {
+    private QuestionAnswerAdvisor qaAdvisor(String userQuery) {
         return new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
+                                                                   .query(userQuery)
                                                                    .similarityThreshold(0.70)
                                                                    .topK(6)
                                                                    .build());

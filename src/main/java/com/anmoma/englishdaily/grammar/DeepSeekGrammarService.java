@@ -4,8 +4,10 @@ import com.anmoma.englishdaily.LlmNotAvailableException;
 import com.anmoma.englishdaily.catalog.GrammarLesson;
 import com.anmoma.englishdaily.chatclient.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.RetrievalAugmentationAdvisor;
+import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.ollama.api.OllamaOptions;
+import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -42,10 +44,10 @@ public class DeepSeekGrammarService implements GrammarService {
 
     private final ChatClient chatClient;
     private final SimpleLoggerAdvisor simpleLoggerAdvisor;
-    private final RetrievalAugmentationAdvisor ragAdvisor;
+    private final VectorStore vectorStore;
 
-    public DeepSeekGrammarService(ChatClient chatClient, SimpleLoggerAdvisor simpleLoggerAdvisor, RetrievalAugmentationAdvisor ragAdvisor) {
-        this.ragAdvisor = ragAdvisor;
+    public DeepSeekGrammarService(ChatClient chatClient, SimpleLoggerAdvisor simpleLoggerAdvisor, VectorStore vectorStore) {
+        this.vectorStore = vectorStore;
         this.chatClient = chatClient;
         this.simpleLoggerAdvisor = simpleLoggerAdvisor;
     }
@@ -54,9 +56,8 @@ public class DeepSeekGrammarService implements GrammarService {
     public Flux<String> generateGrammarLesson(GrammarLesson lesson) {
         try {
             return chatClient.prompt()
-                             .user(SYSTEM_PROMPT + "<question> Prepare a lesson about " + lesson.getTitle() +
-                                     " based on the context extracted from the documents</question>")
-                             .advisors(ragAdvisor, simpleLoggerAdvisor)
+                             .user("<question> Explain me briefly what " + lesson.getTitle() + " is </question>")
+                             .advisors(qaAdvisor("Explain me briefly what " + lesson.getTitle() + " is"), simpleLoggerAdvisor)
                              .options(OllamaOptions.builder()
                                                    .temperature(0.4)
                                                    .build())
@@ -65,6 +66,15 @@ public class DeepSeekGrammarService implements GrammarService {
         } catch (ResourceAccessException rae) {
             throw new LlmNotAvailableException("Llama service is not available");
         }
+    }
+
+    private QuestionAnswerAdvisor qaAdvisor(String question) {
+        return new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
+                                                                   .query(question)
+                                                                   .similarityThreshold(0.70)
+                                                                   .topK(6)
+                                                                   .build());
+
     }
 
 }

@@ -87,6 +87,7 @@ public class DeepSeekVocabularyService implements VocabularyService {
     private QuestionAnswerAdvisor qaAdvisor(String filename) {
         Filter.Expression filterExpression = new Filter.Expression(Filter.ExpressionType.EQ, new Filter.Key("file_name"), new Filter.Value(filename));
         return new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
+                                                                   .query("Get the list of items from the vocabulary bank")
                                                                    .similarityThreshold(0.10)
                                                                    .topK(2)
                                                                    .filterExpression(filterExpression)
