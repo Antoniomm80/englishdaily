@@ -1,15 +1,13 @@
 package com.anmoma.englishdaily.vocabulary;
 
 import com.anmoma.englishdaily.LlmNotAvailableException;
-import com.anmoma.englishdaily.chatclient.SimpleLoggerAdvisor;
 import com.anmoma.englishdaily.documentreader.FilenameProvider;
+import com.anmoma.englishdaily.vectorstore.QuestionAwserAdvisorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.ollama.api.OllamaOptions;
-import org.springframework.ai.vectorstore.SearchRequest;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.ai.vectorstore.filter.Filter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -43,19 +41,16 @@ public class DeepSeekVocabularyService implements VocabularyService {
             <question>Get one random term from vocabulary bank</question> 
             """;
 
-    private final VectorStore vectorStore;
+    private final QuestionAwserAdvisorFactory questionAwserAdvisorFactory;
     private final ChatClient chatClient;
     private final FilenameProvider filenameProvider;
-    private final SimpleLoggerAdvisor simpleLoggerAdvisor;
     private final DeepSeekResposeProcessor deepSeekResposeProcessor;
 
-    public DeepSeekVocabularyService(VectorStore vectorStore, ChatClient chatClient, FilenameProvider filenameProvider,
-            SimpleLoggerAdvisor simpleLoggerAdvisor, DeepSeekResposeProcessor deepSeekResposeProcessor) {
-        this.vectorStore = vectorStore;
+    public DeepSeekVocabularyService(QuestionAwserAdvisorFactory questionAwserAdvisorFactory, ChatClient chatClient,
+            FilenameProvider filenameProvider, DeepSeekResposeProcessor deepSeekResposeProcessor) {
+        this.questionAwserAdvisorFactory = questionAwserAdvisorFactory;
         this.chatClient = chatClient;
         this.filenameProvider = filenameProvider;
-
-        this.simpleLoggerAdvisor = simpleLoggerAdvisor;
         this.deepSeekResposeProcessor = deepSeekResposeProcessor;
     }
 
@@ -86,12 +81,8 @@ public class DeepSeekVocabularyService implements VocabularyService {
 
     private QuestionAnswerAdvisor qaAdvisor(String filename) {
         Filter.Expression filterExpression = new Filter.Expression(Filter.ExpressionType.EQ, new Filter.Key("file_name"), new Filter.Value(filename));
-        return new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
-                                                                   .query("Get the list of items from the vocabulary bank")
-                                                                   .similarityThreshold(0.10)
-                                                                   .topK(2)
-                                                                   .filterExpression(filterExpression)
-                                                                   .build());
+        return questionAwserAdvisorFactory.createAdvisorWithQuerySimilarityThresholdTopKAndFilterExpression(
+                "Get the list of items from the vocabulary bank", .1, 2, filterExpression);
 
     }
 

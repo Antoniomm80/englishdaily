@@ -2,10 +2,8 @@ package com.anmoma.englishdaily.askllama;
 
 import com.anmoma.englishdaily.LlmNotAvailableException;
 import com.anmoma.englishdaily.chatclient.SimpleLoggerAdvisor;
+import com.anmoma.englishdaily.vectorstore.QuestionAwserAdvisorFactory;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
-import org.springframework.ai.vectorstore.SearchRequest;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -39,12 +37,12 @@ public class AskLlamaService implements AskLlmService {
             Design prompts that encourage interaction and practice.
             """;
 
-    private final VectorStore vectorStore;
+    private final QuestionAwserAdvisorFactory questionAwserAdvisorFactory;
     private final ChatClient chatClient;
     private final SimpleLoggerAdvisor simpleLoggerAdvisor;
 
-    public AskLlamaService(VectorStore vectorStore, ChatClient chatClient, SimpleLoggerAdvisor simpleLoggerAdvisor) {
-        this.vectorStore = vectorStore;
+    public AskLlamaService(QuestionAwserAdvisorFactory questionAwserAdvisorFactory, ChatClient chatClient, SimpleLoggerAdvisor simpleLoggerAdvisor) {
+        this.questionAwserAdvisorFactory = questionAwserAdvisorFactory;
         this.chatClient = chatClient;
         this.simpleLoggerAdvisor = simpleLoggerAdvisor;
     }
@@ -55,20 +53,11 @@ public class AskLlamaService implements AskLlmService {
             return chatClient.prompt()
                              .system(SYSTEM_PROMPT)
                              .user(userRequest)
-                             .advisors(qaAdvisor(), simpleLoggerAdvisor)
+                             .advisors(questionAwserAdvisorFactory.createAdvisorWithQuery(userRequest), simpleLoggerAdvisor)
                              .stream()
                              .content();
         } catch (ResourceAccessException rae) {
             throw new LlmNotAvailableException("Llama service is not available");
         }
     }
-
-    private QuestionAnswerAdvisor qaAdvisor() {
-        return new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
-                                                                   .similarityThreshold(0.70)
-                                                                   .topK(6)
-                                                                   .build());
-
-    }
-
 }

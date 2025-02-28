@@ -3,10 +3,9 @@ package com.anmoma.englishdaily.grammar;
 import com.anmoma.englishdaily.LlmNotAvailableException;
 import com.anmoma.englishdaily.catalog.GrammarLesson;
 import com.anmoma.englishdaily.chatclient.SimpleLoggerAdvisor;
+import com.anmoma.englishdaily.vectorstore.QuestionAwserAdvisorFactory;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.ollama.api.OllamaOptions;
-import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -41,23 +40,25 @@ public class DeepSeekGrammarService implements GrammarService {
             Design prompts that encourage interaction and practice.
             </context>
             """;
-
+    private final QuestionAwserAdvisorFactory questionAwserAdvisorFactory;
     private final ChatClient chatClient;
     private final SimpleLoggerAdvisor simpleLoggerAdvisor;
-    private final VectorStore vectorStore;
 
-    public DeepSeekGrammarService(ChatClient chatClient, SimpleLoggerAdvisor simpleLoggerAdvisor, VectorStore vectorStore) {
-        this.vectorStore = vectorStore;
+    public DeepSeekGrammarService(ChatClient chatClient, SimpleLoggerAdvisor simpleLoggerAdvisor, VectorStore vectorStore,
+            QuestionAwserAdvisorFactory questionAwserAdvisorFactory) {
+
         this.chatClient = chatClient;
         this.simpleLoggerAdvisor = simpleLoggerAdvisor;
+        this.questionAwserAdvisorFactory = questionAwserAdvisorFactory;
     }
 
     @Override
     public Flux<String> generateGrammarLesson(GrammarLesson lesson) {
         try {
             return chatClient.prompt()
-                             .user("<question> Explain me briefly what " + lesson.getTitle() + " is </question>")
-                             .advisors(qaAdvisor("Explain me briefly what " + lesson.getTitle() + " is"), simpleLoggerAdvisor)
+                             .user("<question> Explain me in great detail what " + lesson.getTitle() +
+                                     " is. The explanation should include some usage examples besides what " + lesson.getTitle() + "is </question>")
+                             .advisors(questionAwserAdvisorFactory.createAdvisorWithQuery(lesson.getTitle()), simpleLoggerAdvisor)
                              .options(OllamaOptions.builder()
                                                    .temperature(0.4)
                                                    .build())
@@ -67,14 +68,4 @@ public class DeepSeekGrammarService implements GrammarService {
             throw new LlmNotAvailableException("Llama service is not available");
         }
     }
-
-    private QuestionAnswerAdvisor qaAdvisor(String question) {
-        return new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
-                                                                   .query(question)
-                                                                   .similarityThreshold(0.70)
-                                                                   .topK(6)
-                                                                   .build());
-
-    }
-
 }

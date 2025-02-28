@@ -3,12 +3,11 @@ package com.anmoma.englishdaily.vocabulary;
 import com.anmoma.englishdaily.LlmNotAvailableException;
 import com.anmoma.englishdaily.chatclient.SimpleLoggerAdvisor;
 import com.anmoma.englishdaily.documentreader.FilenameProvider;
+import com.anmoma.englishdaily.vectorstore.QuestionAwserAdvisorFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.ollama.api.OllamaOptions;
-import org.springframework.ai.vectorstore.SearchRequest;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.ai.vectorstore.filter.Filter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -39,14 +38,14 @@ public class LlamaVocabularyService implements VocabularyService {
             Get one random slang term from vocabulary bank, along with its definition, part of speech, pronunciation, and an example sentence. If applicable, include common collocations or synonyms for additional context. 
             """;
 
-    private final VectorStore vectorStore;
+    private final QuestionAwserAdvisorFactory questionAwserAdvisorFactory;
     private final ChatClient chatClient;
     private final FilenameProvider filenameProvider;
     private final SimpleLoggerAdvisor simpleLoggerAdvisor;
 
-    public LlamaVocabularyService(VectorStore vectorStore, ChatClient chatClient, FilenameProvider filenameProvider,
+    public LlamaVocabularyService(QuestionAwserAdvisorFactory questionAwserAdvisorFactory, ChatClient chatClient, FilenameProvider filenameProvider,
             SimpleLoggerAdvisor simpleLoggerAdvisor) {
-        this.vectorStore = vectorStore;
+        this.questionAwserAdvisorFactory = questionAwserAdvisorFactory;
         this.chatClient = chatClient;
         this.filenameProvider = filenameProvider;
         this.simpleLoggerAdvisor = simpleLoggerAdvisor;
@@ -83,11 +82,8 @@ public class LlamaVocabularyService implements VocabularyService {
 
     private QuestionAnswerAdvisor qaAdvisor(String filename) {
         Filter.Expression filterExpression = new Filter.Expression(Filter.ExpressionType.EQ, new Filter.Key("file_name"), new Filter.Value(filename));
-        return new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
-                                                                   .similarityThreshold(0.10)
-                                                                   .topK(6)
-                                                                   .filterExpression(filterExpression)
-                                                                   .build());
+        return questionAwserAdvisorFactory.createAdvisorWithQuerySimilarityThresholdTopKAndFilterExpression(
+                "Get the list of items from the vocabulary bank", .1, 2, filterExpression);
 
     }
 

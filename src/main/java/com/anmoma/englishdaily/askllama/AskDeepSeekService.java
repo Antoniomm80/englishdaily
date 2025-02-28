@@ -2,11 +2,9 @@ package com.anmoma.englishdaily.askllama;
 
 import com.anmoma.englishdaily.LlmNotAvailableException;
 import com.anmoma.englishdaily.chatclient.SimpleLoggerAdvisor;
+import com.anmoma.englishdaily.vectorstore.QuestionAwserAdvisorFactory;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.ollama.api.OllamaOptions;
-import org.springframework.ai.vectorstore.SearchRequest;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -42,13 +40,14 @@ public class AskDeepSeekService implements AskLlmService {
             </context>
             """;
 
-    private final VectorStore vectorStore;
     private final ChatClient chatClient;
+    private final QuestionAwserAdvisorFactory questionAwserAdvisorFactory;
     private final SimpleLoggerAdvisor simpleLoggerAdvisor;
 
-    public AskDeepSeekService(VectorStore vectorStore, ChatClient chatClient, SimpleLoggerAdvisor simpleLoggerAdvisor) {
-        this.vectorStore = vectorStore;
+    public AskDeepSeekService(ChatClient chatClient, QuestionAwserAdvisorFactory questionAwserAdvisorFactory,
+            SimpleLoggerAdvisor simpleLoggerAdvisor) {
         this.chatClient = chatClient;
+        this.questionAwserAdvisorFactory = questionAwserAdvisorFactory;
         this.simpleLoggerAdvisor = simpleLoggerAdvisor;
     }
 
@@ -57,7 +56,7 @@ public class AskDeepSeekService implements AskLlmService {
         try {
             return chatClient.prompt()
                              .user(SYSTEM_PROMPT + "<question>" + userRequest + "</question>")
-                             .advisors(qaAdvisor(userRequest), simpleLoggerAdvisor)
+                             .advisors(questionAwserAdvisorFactory.createAdvisorWithQuery(userRequest), simpleLoggerAdvisor)
                              .options(OllamaOptions.builder()
                                                    .temperature(0.4)
                                                    .build())
@@ -67,14 +66,4 @@ public class AskDeepSeekService implements AskLlmService {
             throw new LlmNotAvailableException("Llama service is not available");
         }
     }
-
-    private QuestionAnswerAdvisor qaAdvisor(String userQuery) {
-        return new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
-                                                                   .query(userQuery)
-                                                                   .similarityThreshold(0.70)
-                                                                   .topK(6)
-                                                                   .build());
-
-    }
-
 }
