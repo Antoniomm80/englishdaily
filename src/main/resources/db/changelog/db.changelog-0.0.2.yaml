@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      comment: Add courses catalog
+      author: amm
+      changes:
+        - insert:
+            tableName: courses
+            columns:
+              - column:
+                  name: title
+                  value: 'C1 Challenge Vocabulary'
+              - column:
+                  name: folder_path
+                  value: 'c1vocabulary'
+              - column:
+                  name: vocabulary_supported
+                  value: true

@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      comment: Add courses catalog
+      author: amm
+      changes:
+        - insert:
+            tableName: courses
+            columns:
+              - column:
+                  name: title
+                  value: 'B2 Challenge Vocabulary'
+              - column:
+                  name: folder_path
+                  value: 'b2vocabulary'
+              - column:
+                  name: vocabulary_supported
+                  value: true

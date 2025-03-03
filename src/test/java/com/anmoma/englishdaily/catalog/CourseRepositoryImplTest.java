@@ -44,6 +44,6 @@ class CourseRepositoryImplTest {
     void givenFindAllVocabularySupportedCoursesShouldReturnTwo() {
         List<Course> vocabularySupportedCourses = courseRepository.findAllVocabularySupportedCourses();
 
-        assertThat(vocabularySupportedCourses).hasSize(2);
+        assertThat(vocabularySupportedCourses).hasSize(4);
     }
 }
