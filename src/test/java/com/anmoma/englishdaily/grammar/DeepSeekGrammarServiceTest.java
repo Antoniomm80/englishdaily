@@ -2,6 +2,7 @@ package com.anmoma.englishdaily.grammar;
 
 import com.anmoma.englishdaily.IntegrationTest;
 import com.anmoma.englishdaily.catalog.GrammarLesson;
+import com.anmoma.englishdaily.catalog.GrammarLessonLevel;
 import com.anmoma.englishdaily.vectorstore.IngestionPipeline;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -26,7 +27,9 @@ class DeepSeekGrammarServiceTest {
     @DisplayName("Debería devolver una lección de gramática")
     @Disabled("Solo para testing manual")
     void shouldReturnAGrammarLesson() {
-        Flux<String> grammarLesson = grammarService.generateGrammarLesson(GrammarLesson.IMPERSONAL_PASSIVE_VOICE);
+        GrammarLesson impersonalPassiveVoiceLesson = GrammarLesson.grammarLessonWithTitleAndLevel("Impersonal Passive Voice, Get/Have Structures",
+                GrammarLessonLevel.ADVANCED_GRAMMAR_CHALLENGE);
+        Flux<String> grammarLesson = grammarService.generateGrammarLesson(impersonalPassiveVoiceLesson);
         String string = grammarLesson.collectList()
                                      .block()
                                      .stream()

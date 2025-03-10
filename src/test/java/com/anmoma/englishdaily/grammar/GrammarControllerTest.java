@@ -1,7 +1,6 @@
 package com.anmoma.englishdaily.grammar;
 
 import com.anmoma.englishdaily.IntegrationTest;
-import com.anmoma.englishdaily.catalog.GrammarLesson;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.teketik.test.mockinbean.MockInBean;
 import org.junit.jupiter.api.DisplayName;
@@ -20,17 +19,17 @@ class GrammarControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockInBean(GrammarController.class)
-    private GrammarService grammarService;
+    private GrammarLessonApplicationService grammarLessonApplicationService;
     @Autowired
     private SocketIOServer socketIOServer;
 
     @Test
-    @DisplayName("Debería devolver una respuesta de Llama")
-    void givenPostRequestShouldInvokeLlama() throws Exception {
-        given(grammarService.generateGrammarLesson(GrammarLesson.CLEFT_SENTENCES)).willReturn(
+    @DisplayName("Debería devolver una respuesta de OLlama")
+    void givenPostRequestShouldInvokeOLlama() throws Exception {
+        given(grammarLessonApplicationService.generateGrammarLesson(15L)).willReturn(
                 Flux.just("Cleft sentences", "are used to emphasize a particular piece", "of new or important information."));
 
-        mockMvc.perform(get("/api/v1/englishdaily/grammar").param("grammarLesson", "CLEFT_SENTENCES"))
+        mockMvc.perform(get("/api/v1/englishdaily/grammar/{grammarLessonId}", 15))
                .andExpect(status().isOk());
 
         then(socketIOServer.getBroadcastOperations()).should()

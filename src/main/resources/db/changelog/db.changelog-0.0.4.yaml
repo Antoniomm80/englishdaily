@@ -1,0 +1,135 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      comment: Create table grammar_lessons with id auto incremental, title and level as int column
+      author: amm
+      changes:
+        - createTable:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: title
+                  type: varchar(512)
+              - column:
+                  name: level
+                  type: int
+
+  - changeSet:
+      id: 6
+      comment: Add courses catalog
+      author: amm
+      changes:
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Advanced Comparative Structures'
+              - column:
+                  name: level
+                  value: "3"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Gradable and Non-gradable Adjectives'
+              - column:
+                  name: level
+                  value: "3"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Past and Presents Assumptions'
+              - column:
+                  name: level
+                  value: "3"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Speculation and Deduction'
+              - column:
+                  name: level
+                  value: "3"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Mixed Conditionals'
+              - column:
+                  name: level
+                  value: "3"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'The Subjunctive Mood'
+              - column:
+                  name: level
+                  value: "3"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Transitive and Intransitive Verbs'
+              - column:
+                  name: level
+                  value: "3"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Verb Patterns'
+              - column:
+                  name: level
+                  value: "3"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Relative and Participle Clauses'
+              - column:
+                  name: level
+                  value: "3"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Used to, Get Used to, Be Used to'
+              - column:
+                  name: level
+                  value: "3"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Impersonal Passive Voice, Get/Have Structures'
+              - column:
+                  name: level
+                  value: "3"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Cleft Sentences'
+              - column:
+                  name: level
+                  value: "3"
