@@ -22,14 +22,16 @@ public class IngestionPipeline {
     private final KeywordEnricher keywordEnricher;
     private final DocumentReader documentReader;
     private final CourseRepository courseRepository;
+    private final VectorStoreItemRepository vectorStoreItemRepository;
 
     IngestionPipeline(VectorStore vectorStore, FolderReader folderReader, KeywordEnricher keywordEnricher, DocumentReader documentReader,
-            CourseRepository courseRepository) {
+            CourseRepository courseRepository, VectorStoreItemRepository vectorStoreItemRepository) {
         this.vectorStore = vectorStore;
         this.folderReader = folderReader;
         this.keywordEnricher = keywordEnricher;
         this.documentReader = documentReader;
         this.courseRepository = courseRepository;
+        this.vectorStoreItemRepository = vectorStoreItemRepository;
     }
 
     public void populateVectorStore() {
@@ -39,14 +41,31 @@ public class IngestionPipeline {
                   .forEach(folder -> {
                       List<Path> filesList = folderReader.getFilenamesFromFolder("documents/" + folder);
                       filesList.forEach(f -> {
-                          log.info("Reading file {}", f.getFileName()
-                                                       .toString());
+                          String filename = f.getFileName()
+                                             .toString();
+                          log.debug("Reading file {}", filename);
+                          if (!vectorStoreItemRepository.findItemsByFileName(filename)
+                                                        .isEmpty()) {
+                              log.debug("File {} already exists in vector store", filename);
+                              return;
+                          }
                           Resource resource = new PathResource(f);
-                          List<Document> documentsToAdd = documentReader.readResource(resource);
-                          //List<Document> enrichedDocuments = keywordEnricher.enrichDocuments(documentsToAdd);
-                          vectorStore.add(documentsToAdd);
+                          vectorStore.add(readResource(f, resource));
                       });
                   });
+    }
+
+    private List<Document> readResource(Path f, Resource resource) {
+        try {
+
+            return documentReader.readResource(resource);
+            //List<Document> enrichedDocuments = keywordEnricher.enrichDocuments(documentsToAdd);
+
+        } catch (AssertionError e) {
+            log.error("Error reading file {}", f.getFileName()
+                                                .toString(), e);
+        }
+        return List.of();
     }
 
 }

@@ -133,3 +133,38 @@ databaseChangeLog:
               - column:
                   name: level
                   value: "3"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Introduction to Paraphrasing'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Compounds Adjectives'
+              - column:
+                  name: level
+                  value: "2"
+  - changeSet:
+      id: 7
+      comment: Add courses catalog
+      author: amm
+      changes:
+        - insert:
+            tableName: courses
+            columns:
+              - column:
+                  name: title
+                  value: 'C1 Course'
+              - column:
+                  name: folder_path
+                  value: 'c1course'
+              - column:
+                  name: vocabulary_supported
+                  value: false
