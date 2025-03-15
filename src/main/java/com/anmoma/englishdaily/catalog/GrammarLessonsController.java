@@ -19,7 +19,7 @@ class GrammarLessonsController {
 
     @GetMapping("grammar-lessons/{levelId}")
     ResponseEntity<GrammarLessonsResponse> findGrammarLessonsByLevel(@PathVariable Integer levelId) {
-        List<GrammarLessonItem> lessons = grammarLessonRepository.findGrammarLessonsByLevel(GrammarLessonLevel.fromCode(3))
+        List<GrammarLessonItem> lessons = grammarLessonRepository.findGrammarLessonsByLevel(GrammarLessonLevel.fromCode(levelId))
                                                                  .stream()
                                                                  .map(lesson -> new GrammarLessonItem(lesson.getId(), lesson.getTitle()))
                                                                  .toList();
