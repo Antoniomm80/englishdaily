@@ -5,11 +5,12 @@ import com.anmoma.englishdaily.catalog.GrammarLesson;
 import com.anmoma.englishdaily.catalog.GrammarLessonLevel;
 import com.anmoma.englishdaily.vectorstore.IngestionPipeline;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Flux;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @IntegrationTest
 class DeepSeekGrammarServiceTest {
@@ -25,7 +26,6 @@ class DeepSeekGrammarServiceTest {
 
     @Test
     @DisplayName("Debería devolver una lección de gramática")
-    @Disabled("Solo para testing manual")
     void shouldReturnAGrammarLesson() {
         GrammarLesson impersonalPassiveVoiceLesson = GrammarLesson.grammarLessonWithTitleAndLevel("Impersonal Passive Voice, Get/Have Structures",
                 GrammarLessonLevel.ADVANCED_GRAMMAR_CHALLENGE);
@@ -36,5 +36,6 @@ class DeepSeekGrammarServiceTest {
                                      .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
                                      .toString();
         System.out.println(string);
+        assertThat(string).isNotEmpty();
     }
 }

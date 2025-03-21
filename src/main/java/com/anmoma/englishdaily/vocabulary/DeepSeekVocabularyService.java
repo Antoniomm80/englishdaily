@@ -1,19 +1,24 @@
 package com.anmoma.englishdaily.vocabulary;
 
 import com.anmoma.englishdaily.LlmNotAvailableException;
+import com.anmoma.englishdaily.chatclient.SimpleLoggerAdvisor;
 import com.anmoma.englishdaily.documentreader.FilenameProvider;
 import com.anmoma.englishdaily.vectorstore.QuestionAwserAdvisorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
+import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.ai.vectorstore.filter.Filter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 @ConditionalOnProperty(value = "englishdaily.chat-service.llm-model", havingValue = "deepseek")
@@ -25,7 +30,7 @@ public class DeepSeekVocabularyService implements VocabularyService {
             You are provided with a set of documents that contain a variety of information about the English language. 
             Your task is to extract information from these documents and provide it to users in a structured format.
             One of this sections is the vocabulary bank section which contains a list of items along with its definition.
-            The terms can be found under the section named "Vocabulary Bank" and can be labelled as follows:
+            The terms can be found under the section named "Vocabulary Bank" or "Vocabulary List" or similar and can be labelled as follows:
             - idiom which stands for idiom
             - n which stands for noun
             - v which stands for verb
@@ -38,20 +43,25 @@ public class DeepSeekVocabularyService implements VocabularyService {
             </context>            
             """;
     private static final String USER_REQUEST = """
-            <question>Get one random term from vocabulary bank</question> 
+            <question>Get one random term from vocabulary bank</question>
             """;
 
     private final QuestionAwserAdvisorFactory questionAwserAdvisorFactory;
     private final ChatClient chatClient;
     private final FilenameProvider filenameProvider;
     private final DeepSeekResposeProcessor deepSeekResposeProcessor;
+    private final SimpleLoggerAdvisor simpleLoggerAdvisor;
+    private final boolean enableLogging;
 
     public DeepSeekVocabularyService(QuestionAwserAdvisorFactory questionAwserAdvisorFactory, ChatClient chatClient,
-            FilenameProvider filenameProvider, DeepSeekResposeProcessor deepSeekResposeProcessor) {
+            FilenameProvider filenameProvider, DeepSeekResposeProcessor deepSeekResposeProcessor, SimpleLoggerAdvisor simpleLoggerAdvisor,
+            @Value("${englishdaily.logging-advisor.enabled:false}") boolean enableLogging) {
         this.questionAwserAdvisorFactory = questionAwserAdvisorFactory;
         this.chatClient = chatClient;
         this.filenameProvider = filenameProvider;
         this.deepSeekResposeProcessor = deepSeekResposeProcessor;
+        this.simpleLoggerAdvisor = simpleLoggerAdvisor;
+        this.enableLogging = enableLogging;
     }
 
     @Override
@@ -64,9 +74,11 @@ public class DeepSeekVocabularyService implements VocabularyService {
         try {
             String sourceDocument = filenameProvider.getRandomFilenameFromDocumentsFolder();
 
+            Stream<Advisor> advisors = Stream.of(qaAdvisor(sourceDocument), enableLogging ? simpleLoggerAdvisor : null);
             String llmGeneratedVocabularyTerm = chatClient.prompt()
                                                           .user(SYSTEM_PROMPT.replace("{blackList}", String.join(",", blacklist)) + USER_REQUEST)
-                                                          .advisors(qaAdvisor(sourceDocument))
+                                                          .advisors(advisors.filter(Objects::nonNull)
+                                                                            .toList())
                                                           .options(OllamaOptions.builder()
                                                                                 .temperature(0.5)
                                                                                 .build())

@@ -4,11 +4,16 @@ import com.anmoma.englishdaily.LlmNotAvailableException;
 import com.anmoma.englishdaily.chatclient.SimpleLoggerAdvisor;
 import com.anmoma.englishdaily.vectorstore.QuestionAwserAdvisorFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.ollama.api.OllamaOptions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import reactor.core.publisher.Flux;
+
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 @ConditionalOnProperty(value = "englishdaily.chat-service.llm-model", havingValue = "deepseek")
@@ -16,47 +21,45 @@ public class AskDeepSeekService implements AskLlmService {
 
     private static final String SYSTEM_PROMPT = """
             <context>
-            You are an advanced AI language assistant designed to help users learn English effectively. Your primary objective is to deliver clear, accurate, and engaging daily lessons focused on vocabulary and grammar. 
-            All content is derived from high-quality educational material extracted from PDF files.
-            
+            You are a teacher whose mission is to help users learn English effectively. Your primary objective is to deliver clear, accurate, and engaging explations to the user questions.                       
             Operational Guidelines
             Accuracy and Clarity:
-            Your mission is to awsner user questions and provide detailed explanations.
+            Your mission is to answer user questions and provide detailed explanations.
             Provide grammatically correct examples.
             Explain nuances clearly, ensuring standard English usage without regional bias.            
-            Interactive Learning:
-            Encourage user participation by asking them to:
-            Create their own sentences.
-            Complete exercises or answer questions based on the day’s lesson.
-            Source Material Relevance:
-            Prioritize insights and examples from the PDF content to maintain continuity and contextual relevance.            
-            Behavior Expectations
-            Adapt to User Needs:
-            If a user struggles with a concept, simplify your explanations and provide more examples.
-            Highlight Word Usage:
-            For vocabulary, include word forms (e.g., noun, verb, adjective) and common collocations.
-            Foster Engagement:
-            Design prompts that encourage interaction and practice.
+            Propose some exercises to foster engagement.
+            Some questions may require a more detailed explanation than others. In such cases, provide a more detailed explanation.
+            Some questions may be comprised of many items. In such cases, elaborate on each item.
             </context>
+            """;
+
+    private final static String USER_PROMPT = """
+            <question> {userRequest} </question>
             """;
 
     private final ChatClient chatClient;
     private final QuestionAwserAdvisorFactory questionAwserAdvisorFactory;
     private final SimpleLoggerAdvisor simpleLoggerAdvisor;
+    private final boolean enableLogging;
 
-    public AskDeepSeekService(ChatClient chatClient, QuestionAwserAdvisorFactory questionAwserAdvisorFactory,
-            SimpleLoggerAdvisor simpleLoggerAdvisor) {
+    public AskDeepSeekService(ChatClient chatClient, QuestionAwserAdvisorFactory questionAwserAdvisorFactory, SimpleLoggerAdvisor simpleLoggerAdvisor,
+            @Value("${englishdaily.logging-advisor.enabled:false}") boolean enableLogging) {
         this.chatClient = chatClient;
         this.questionAwserAdvisorFactory = questionAwserAdvisorFactory;
         this.simpleLoggerAdvisor = simpleLoggerAdvisor;
+        this.enableLogging = enableLogging;
     }
 
     @Override
     public Flux<String> ask(String userRequest) {
         try {
+            Stream<Advisor> advisors = Stream.of(questionAwserAdvisorFactory.createAdvisorWithQuery(userRequest),
+                    enableLogging ? simpleLoggerAdvisor : null);
             return chatClient.prompt()
-                             .user(SYSTEM_PROMPT + "<question>" + userRequest + "</question>")
-                             .advisors(questionAwserAdvisorFactory.createAdvisorWithQuery(userRequest), simpleLoggerAdvisor)
+                             .system(SYSTEM_PROMPT)
+                             .user(USER_PROMPT.replace("{userRequest}", userRequest))
+                             .advisors(advisors.filter(Objects::nonNull)
+                                               .toList())
                              .options(OllamaOptions.builder()
                                                    .temperature(0.4)
                                                    .build())
