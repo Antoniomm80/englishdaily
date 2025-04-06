@@ -24,7 +24,7 @@ class VocabularyServiceTest {
     }
 
     @Test
-    @Disabled("Solo para testing manual")
+    @Disabled
     void ingestionPipelineShouldIterateThroughDocumentsFolder() {
         VocabularyTerm dailyVocabulary = vocabularyService.getDailyVocabulary(List.of("yonks", "epic", "crush", "crash"));
         System.out.println(dailyVocabulary);
