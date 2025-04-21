@@ -36,7 +36,7 @@ class RabbitMessagePublishTest {
     @Test
     @DisplayName("Se debe poder enviar mensajes al exchange configurado")
     void shouldBeAbleToPublishMessage() {
-        EventMessage<String> message = new EventMessage<>(Instant.now(), "Este es un mensaje de prueba");
+        EventMessage<String> message = new EventMessage<>(Instant.now(), "Este es un mensaje de prueba", false);
         Assertions.assertThatCode(() -> rabbitTemplate.convertAndSend(exchange, "test", objectMapper.writeValueAsString(message)))
                   .doesNotThrowAnyException();
 

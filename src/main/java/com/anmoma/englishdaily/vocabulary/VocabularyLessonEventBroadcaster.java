@@ -10,7 +10,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.time.LocalDate;
 
 @Component
 public class VocabularyLessonEventBroadcaster {
@@ -19,20 +18,20 @@ public class VocabularyLessonEventBroadcaster {
     private final RabbitTemplate rabbitTemplate;
     private final String exchangeName;
     private final ObjectMapper objectMapper;
+    private final VocabularyLessonCreatedPrinter vocabularyLessonCreatedPrinter;
 
     public VocabularyLessonEventBroadcaster(RabbitTemplate rabbitTemplate, @Value("${com.antoniomm.englishdaily.exchange-name}") String exchangeName,
-            ObjectMapper objectMapper) {
+            ObjectMapper objectMapper, VocabularyLessonCreatedPrinter vocabularyLessonCreatedPrinter) {
         this.rabbitTemplate = rabbitTemplate;
         this.exchangeName = exchangeName;
         this.objectMapper = objectMapper;
+        this.vocabularyLessonCreatedPrinter = vocabularyLessonCreatedPrinter;
     }
 
     @EventListener
     public void handleRecipeCreatedEvent(VocabularyLessonCreated event) throws JsonProcessingException {
         log.info("Enviando evento de vocabulario creada al exchange {}", exchangeName);
-        LocalDate date = LocalDate.now();
-        String messagePayload = String.format("\ud83c\uddec\ud83c\udde7 This is the vocabulary lesson for %s: %s", date, event.printLesson());
-        EventMessage<String> message = new EventMessage<>(Instant.now(), messagePayload);
+        EventMessage<String> message = new EventMessage<>(Instant.now(), vocabularyLessonCreatedPrinter.printEvent(event), true);
         rabbitTemplate.convertAndSend(exchangeName, "", objectMapper.writeValueAsString(message));
     }
 }
