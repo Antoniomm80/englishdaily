@@ -26,27 +26,25 @@ class MarkdownVocabularyLessonCreatedPrinterTest {
         String markdownText = printer.printEvent(vocabularyLessonCreated);
 
         assertThat(markdownText).isEqualTo("""
-                # 🇬🇧 This is the vocabulary lesson for 2025-04-01
-                ## Term 1
-                **Source**: EWL B2 - 5.7 Vocabulary Lesson Script.pdf
-                **Word**: to beaver away
-                **Definition**: to work very hard at something for a long time
-                **Part of Speech**: phrasal verb
-                **Pronunciation**: /ˈbiː.vər əˈweɪ/
-                **Example Sentence**: He was beavering away at his computer all night.
-                **Collocations**: beaver away at something, beaver away on something
-                **Synonyms**: to work hard, to toil
-                ---
-                ## Term 2
-                **Source**: EWL B2 - 5.7 Vocabulary Lesson Script.pdf
-                **Word**: to beaver away
-                **Definition**: to work very hard at something for a long time
-                **Part of Speech**: phrasal verb
-                **Pronunciation**: /ˈbiː.vər əˈweɪ/
-                **Example Sentence**: He was beavering away at his computer all night.
-                **Collocations**: beaver away at something, beaver away on something
-                **Synonyms**: to work hard, to toil
-                ---
+                \\*🇬🇧 This is the vocabulary lesson for 2025 04 01*
+                \\*Term 1*
+                \\*Source*: EWL B2 - 5.7 Vocabulary Lesson Script.pdf
+                \\*Word*: to beaver away
+                \\*Definition*: to work very hard at something for a long time
+                \\*Part of Speech*: phrasal verb
+                \\*Pronunciation*: /ˈbiː.vər əˈweɪ/
+                \\*Example Sentence*: He was beavering away at his computer all night.
+                \\*Collocations*: beaver away at something, beaver away on something
+                \\*Synonyms*: to work hard, to toil
+                \\*Term 2*
+                \\*Source*: EWL B2 - 5.7 Vocabulary Lesson Script.pdf
+                \\*Word*: to beaver away
+                \\*Definition*: to work very hard at something for a long time
+                \\*Part of Speech*: phrasal verb
+                \\*Pronunciation*: /ˈbiː.vər əˈweɪ/
+                \\*Example Sentence*: He was beavering away at his computer all night.
+                \\*Collocations*: beaver away at something, beaver away on something
+                \\*Synonyms*: to work hard, to toil
                 """);
     }
 }

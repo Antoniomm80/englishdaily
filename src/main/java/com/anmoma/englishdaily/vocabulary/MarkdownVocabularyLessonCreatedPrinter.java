@@ -3,6 +3,8 @@ package com.anmoma.englishdaily.vocabulary;
 import com.anmoma.englishdaily.common.TimeService;
 import org.springframework.stereotype.Component;
 
+import java.time.format.DateTimeFormatter;
+
 @Component
 class MarkdownVocabularyLessonCreatedPrinter implements VocabularyLessonCreatedPrinter {
 
@@ -16,10 +18,14 @@ class MarkdownVocabularyLessonCreatedPrinter implements VocabularyLessonCreatedP
     public String printEvent(VocabularyLessonCreated event) {
 
         MarkdownMessageBuilder messageBuilder = new MarkdownMessageBuilder();
-        messageBuilder.appendHeader1(String.format("\ud83c\uddec\ud83c\udde7 This is the vocabulary lesson for %s", timeService.now()));
+        messageBuilder.appendBold(String.format("\ud83c\uddec\ud83c\udde7 This is the vocabulary lesson for %s", timeService.now()
+                                                                                                                            .format(DateTimeFormatter.ofPattern(
+                                                                                                                                    "yyyy MM dd"))));
         int index = 1;
+        messageBuilder.appendNewLine();
         for (VocabularyTerm term : event.vocabularyTerms()) {
-            messageBuilder.appendHeader2(String.format("Term %s", index));
+            messageBuilder.appendBold(String.format("Term %s", index));
+            messageBuilder.appendNewLine();
             messageBuilder.appendBoldForLabel("Source");
             messageBuilder.append(term.source());
             messageBuilder.appendNewLine();
@@ -44,7 +50,6 @@ class MarkdownVocabularyLessonCreatedPrinter implements VocabularyLessonCreatedP
             messageBuilder.appendBoldForLabel("Synonyms");
             messageBuilder.append(String.join(", ", term.synonyms()));
             messageBuilder.appendNewLine();
-            messageBuilder.appendHorizontalRule();
             index++;
         }
         return messageBuilder.build();

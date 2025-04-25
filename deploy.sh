@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+set -e
+
 VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
 echo "Testing version $VERSION"
 mvn clean test
