@@ -31,6 +31,6 @@ class VocabularyLessonCreationEventTest {
                             .convertAndSend(eq("exchange.home.events"), eq(""), messageCaptor.capture());
 
         assertThat(messageCaptor.getValue()).contains("""
-                🇬🇧 This is the vocabulary lesson for""");
+                🇬🇧 Vocabulary lesson for""");
     }
 }
