@@ -1,0 +1,428 @@
+databaseChangeLog:
+  - changeSet:
+      id: 8
+      comment: Add courses catalog
+      author: amm
+      changes:
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Phrasal Verbs'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Common mistakes with present tenses'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Causative'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Advance usage of adjectives'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Mixed conditionals, wish and if only'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Order of Adverbs'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Reported Speech in Narration'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Word formation'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Modal verbs: Obligation and necessity'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Modal verbs: Permission, Requests, Offers, Suggestions, Orders and Advice'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Verb patterns'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Reflexibe Pronouns and common mistakes'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Modal verbs: Speculation and deduction'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Modal verbs: Expectation'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Question tags'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Prepositions'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Future tenses: Quick wins'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Complex Future tenses'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Punctuation'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Relative and Participle Clauses'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Full Impersonal Passive Constructions'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Cleft Sentences'
+              - column:
+                  name: level
+                  value: "1"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Comparative and Superlative'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Passive Voice'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Negative inversions'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Cleft Sentences'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Hedging and boosting'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Homonyms, Homographs and Homophones'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Play on words, Double entendres and Innuendos'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Phrasal verbs with multiple meanings'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Advanced Modal verbs and Substitutes'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Additional Discourse Markers'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Discourse Markers and fixed expressions'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Subjunctive words and phrases'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Future tenses'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Inclusive language'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Noun patterns and collocations'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Conditional'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Presentation'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Polite Language and Softening'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Word families'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Common mistakes native speakers make'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Verbs as nouns'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Phrases with it'
+              - column:
+                  name: level
+                  value: "2"
+        - insert:
+            tableName: grammar_lessons
+            columns:
+              - column:
+                  name: title
+                  value: 'Conjunctions'
+              - column:
+                  name: level
+                  value: "2"
+  - changeSet:
+      id: 9
+      comment: Add courses catalog
+      author: amm
+      changes:
+        - insert:
+            tableName: courses
+            columns:
+              - column:
+                  name: title
+                  value: 'B2 Course'
+              - column:
+                  name: folder_path
+                  value: 'b2course'
+              - column:
+                  name: vocabulary_supported
+                  value: false
