@@ -39,3 +39,7 @@ build/
 #Maven
 .mvn
 mvnw*
+
+### Sensitive Files ###
+src/main/resources/service-account.json
+src/test/resources/service-account.json
