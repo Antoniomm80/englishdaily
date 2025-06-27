@@ -7,11 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.core.io.PathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.Path;
 import java.util.List;
 
 @Service
@@ -39,31 +37,29 @@ public class IngestionPipeline {
         allCourses.stream()
                   .map(Course::getFolderPath)
                   .forEach(folder -> {
-                      List<Path> filesList = folderReader.getFilenamesFromFolder("documents/" + folder);
+                      List<String> filesList = folderReader.getFilenamesFromFolder(folder);
                       filesList.forEach(f -> {
-                          String filename = f.getFileName()
-                                             .toString();
-                          log.debug("Reading file {}", filename);
-                          if (!vectorStoreItemRepository.findItemsByFileName(filename)
+
+                          log.debug("Reading file {}", f);
+                          if (!vectorStoreItemRepository.findItemsByFileName(f)
                                                         .isEmpty()) {
-                              log.debug("File {} already exists in vector store", filename);
+                              log.debug("File {} already exists in vector store", f);
                               return;
                           }
-                          Resource resource = new PathResource(f);
-                          vectorStore.add(readResource(f, resource));
+
+                          vectorStore.add(readResource(f, folderReader.getResource(f)));
                       });
                   });
     }
 
-    private List<Document> readResource(Path f, Resource resource) {
+    private List<Document> readResource(String path, Resource resource) {
         try {
 
             return documentReader.readResource(resource);
             //List<Document> enrichedDocuments = keywordEnricher.enrichDocuments(documentsToAdd);
 
         } catch (AssertionError e) {
-            log.error("Error reading file {}", f.getFileName()
-                                                .toString(), e);
+            log.error("Error reading file {}", path, e);
         }
         return List.of();
     }

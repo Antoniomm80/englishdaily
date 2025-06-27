@@ -23,7 +23,7 @@ class FilenameProviderTest {
     @DisplayName("Lecturas consecutivas de nombres de ficheros deben devolver nombres distintos")
     @Test
     void givenConsecutiveCallsShouldReturnDifferentFilenames() {
-        FilenameProvider filenameProvider = new FilenameProvider(new FolderReader(), courseRepository);
+        FilenameProvider filenameProvider = new FilenameProvider(new ClassPathFolderReader(), courseRepository);
         String filename1 = filenameProvider.getRandomFilenameFromDocumentsFolder();
         String filename2 = filenameProvider.getRandomFilenameFromDocumentsFolder();
         assertThat(filename1).isNotEqualTo(filename2);
