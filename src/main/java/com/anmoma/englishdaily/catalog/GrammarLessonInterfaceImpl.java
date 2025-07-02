@@ -14,6 +14,11 @@ public class GrammarLessonInterfaceImpl implements GrammarLessonRepository {
     }
 
     @Override
+    public void create(GrammarLesson grammarLesson) {
+        this.grammarLessonJpaRepository.save(grammarLesson);
+    }
+
+    @Override
     public List<GrammarLesson> findAll() {
         return grammarLessonJpaRepository.findAll();
     }
