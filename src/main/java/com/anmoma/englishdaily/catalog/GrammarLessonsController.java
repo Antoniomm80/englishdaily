@@ -1,10 +1,7 @@
 package com.anmoma.englishdaily.catalog;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -12,9 +9,11 @@ import java.util.List;
 @RequestMapping("api/v1/englishdaily")
 class GrammarLessonsController {
     private final GrammarLessonRepository grammarLessonRepository;
+    private final CreateGrammarLesson createGrammarLesson;
 
-    GrammarLessonsController(GrammarLessonRepository grammarLessonRepository) {
+    GrammarLessonsController(GrammarLessonRepository grammarLessonRepository, CreateGrammarLesson createGrammarLesson) {
         this.grammarLessonRepository = grammarLessonRepository;
+        this.createGrammarLesson = createGrammarLesson;
     }
 
     @GetMapping("grammar-lessons/{levelId}")
@@ -31,5 +30,15 @@ class GrammarLessonsController {
     }
 
     record GrammarLessonsResponse(List<GrammarLessonItem> lessons) {
+    }
+
+    @PostMapping("grammar-lessons")
+    ResponseEntity<Void> createGrammarLesson(@RequestBody CreateGrammarLessonRequest request) {
+        createGrammarLesson.create(new CreateGrammarLessonCommand(request.title(), request.level()));
+        return ResponseEntity.ok()
+                             .build();
+    }
+
+    record CreateGrammarLessonRequest(String title, GrammarLessonLevel level) {
     }
 }
