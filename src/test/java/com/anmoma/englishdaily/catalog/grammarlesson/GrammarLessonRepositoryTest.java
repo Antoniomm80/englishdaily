@@ -1,4 +1,4 @@
-package com.anmoma.englishdaily.catalog;
+package com.anmoma.englishdaily.catalog.grammarlesson;
 
 import com.anmoma.englishdaily.IntegrationTest;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package com.anmoma.englishdaily.catalog;
+package com.anmoma.englishdaily.catalog.course;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

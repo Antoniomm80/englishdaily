@@ -1,8 +1,8 @@
 package com.anmoma.englishdaily.grammar;
 
 import com.anmoma.englishdaily.IntegrationTest;
-import com.anmoma.englishdaily.catalog.GrammarLesson;
-import com.anmoma.englishdaily.catalog.GrammarLessonLevel;
+import com.anmoma.englishdaily.catalog.grammarlesson.GrammarLesson;
+import com.anmoma.englishdaily.catalog.grammarlesson.GrammarLessonLevel;
 import com.anmoma.englishdaily.vectorstore.IngestionPipeline;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

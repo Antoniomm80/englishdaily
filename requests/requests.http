@@ -20,3 +20,12 @@ GET http://controlplane.local/english-daily/api/v1/englishdaily/grammar-lessons
 
 ### Grammar Lesson
 GET http://controlplane.local/english-daily/api/v1/englishdaily/grammar?grammarLesson=CLEFT_SENTENCES
+
+
+### Post Vocabulary lesson
+POST http://controlplane.local/api/v1/englishdaily/grammar-lessons
+Content-Type: application/json;charset=UTF-8
+
+{
+  "question": "Show me ten prhasal verbs related with family and relationships"
+}

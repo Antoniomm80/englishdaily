@@ -1,4 +1,4 @@
-package com.anmoma.englishdaily.catalog;
+package com.anmoma.englishdaily.catalog.grammarlesson;
 
 public enum GrammarLessonLevel {
     B2(1), C1(2), ADVANCED_GRAMMAR_CHALLENGE(3);

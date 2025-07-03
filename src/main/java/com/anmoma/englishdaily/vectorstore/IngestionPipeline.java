@@ -1,7 +1,7 @@
 package com.anmoma.englishdaily.vectorstore;
 
-import com.anmoma.englishdaily.catalog.Course;
-import com.anmoma.englishdaily.catalog.CourseRepository;
+import com.anmoma.englishdaily.catalog.course.Course;
+import com.anmoma.englishdaily.catalog.course.CourseRepository;
 import com.anmoma.englishdaily.documentreader.FolderReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

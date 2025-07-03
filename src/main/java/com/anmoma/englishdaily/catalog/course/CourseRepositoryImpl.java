@@ -1,4 +1,4 @@
-package com.anmoma.englishdaily.catalog;
+package com.anmoma.englishdaily.catalog.course;
 
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +10,11 @@ public class CourseRepositoryImpl implements CourseRepository {
 
     public CourseRepositoryImpl(CourseJpaRepository courseJpaRepository) {
         this.courseJpaRepository = courseJpaRepository;
+    }
+
+    @Override
+    public void create(Course course) {
+        courseJpaRepository.save(course);
     }
 
     @Override

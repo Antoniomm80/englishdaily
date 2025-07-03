@@ -1,7 +1,7 @@
 package com.anmoma.englishdaily.grammar;
 
 import com.anmoma.englishdaily.LlmNotAvailableException;
-import com.anmoma.englishdaily.catalog.GrammarLesson;
+import com.anmoma.englishdaily.catalog.grammarlesson.GrammarLesson;
 import com.anmoma.englishdaily.chatclient.SimpleLoggerAdvisor;
 import com.anmoma.englishdaily.vectorstore.QuestionAwserAdvisorFactory;
 import org.springframework.ai.chat.client.ChatClient;

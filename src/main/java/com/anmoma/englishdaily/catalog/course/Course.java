@@ -1,4 +1,4 @@
-package com.anmoma.englishdaily.catalog;
+package com.anmoma.englishdaily.catalog.course;
 
 import jakarta.persistence.*;
 
@@ -12,7 +12,7 @@ public class Course {
     private String folderPath;
     private boolean vocabularySupported;
 
-    public static Course withTitleFolderPath(String title, String folderPath) {
+    public static Course withTitleAndFolderPath(String title, String folderPath) {
         Course course = new Course();
         course.title = title;
         course.folderPath = folderPath;

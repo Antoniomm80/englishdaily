@@ -1,4 +1,4 @@
-package com.anmoma.englishdaily.catalog;
+package com.anmoma.englishdaily.catalog.grammarlesson;
 
 import com.anmoma.englishdaily.IntegrationTest;
 import com.teketik.test.mockinbean.MockInBean;
@@ -44,12 +44,12 @@ class GrammarLessonsControllerTest {
     @Test
     @DisplayName("Post al endpoint de creación de lecciones de gramática, debería crear una lección")
     void givenPostToEndPointShouldCreateGrammarLesson() throws Exception {
-        mockMvc.perform(post("/api/v1/englishdaily/grammar-lessons")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"title\": \"New Grammar Lesson\", \"level\": \"ADVANCED_GRAMMAR_CHALLENGE\"}"))
-                .andExpect(status().isOk());
+        mockMvc.perform(post("/api/v1/englishdaily/grammar-lessons").contentType(MediaType.APPLICATION_JSON)
+                                                                    .content(
+                                                                            "{\"title\": \"New Grammar Lesson\", \"level\": \"ADVANCED_GRAMMAR_CHALLENGE\"}"))
+               .andExpect(status().isOk());
 
         then(createGrammarLesson).should()
-                .create(new CreateGrammarLessonCommand("New Grammar Lesson", GrammarLessonLevel.ADVANCED_GRAMMAR_CHALLENGE));
+                                 .create(new CreateGrammarLessonCommand("New Grammar Lesson", GrammarLessonLevel.ADVANCED_GRAMMAR_CHALLENGE));
     }
 }

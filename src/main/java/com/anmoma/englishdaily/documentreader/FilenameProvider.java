@@ -1,6 +1,6 @@
 package com.anmoma.englishdaily.documentreader;
 
-import com.anmoma.englishdaily.catalog.CourseRepository;
+import com.anmoma.englishdaily.catalog.course.CourseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

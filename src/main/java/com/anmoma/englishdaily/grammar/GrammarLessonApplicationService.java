@@ -1,7 +1,7 @@
 package com.anmoma.englishdaily.grammar;
 
-import com.anmoma.englishdaily.catalog.GrammarLesson;
-import com.anmoma.englishdaily.catalog.GrammarLessonRepository;
+import com.anmoma.englishdaily.catalog.grammarlesson.GrammarLesson;
+import com.anmoma.englishdaily.catalog.grammarlesson.GrammarLessonRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 

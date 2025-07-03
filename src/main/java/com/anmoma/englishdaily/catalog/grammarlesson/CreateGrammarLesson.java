@@ -1,4 +1,4 @@
-package com.anmoma.englishdaily.catalog;
+package com.anmoma.englishdaily.catalog.grammarlesson;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

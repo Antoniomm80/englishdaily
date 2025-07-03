@@ -1,4 +1,4 @@
-package com.anmoma.englishdaily.catalog;
+package com.anmoma.englishdaily.catalog.course;
 
 import com.anmoma.englishdaily.IntegrationTest;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +13,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CourseRepositoryImplTest {
     @Autowired
     private CourseRepository courseRepository;
+
+    @Test
+    @DisplayName("El repositorio debe guardar datos")
+    void givenCreateRepositoryOperationShouldCourseBePersisted() {
+        courseRepository.create(Course.withTitleFolderPathAndVocabularySupported("Advanced Grammar Challenge", "advancedgrammarchallenge"));
+
+        List<Course> grammarLessons = courseRepository.findAll();
+
+        assertThat(grammarLessons).isNotEmpty()
+                                  .anyMatch(c -> c.getTitle()
+                                                  .equals("Advanced Grammar Challenge") && c.getFolderPath()
+                                                                                            .equals("advancedgrammarchallenge"));
+    }
 
     @Test
     @DisplayName("Find all debe devolver una lista no vacia de cursos")
@@ -40,10 +53,10 @@ class CourseRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("Hay dos cursos que tienen vocabulary bank")
+    @DisplayName("Hay cursos que tienen vocabulary bank")
     void givenFindAllVocabularySupportedCoursesShouldReturnTwo() {
         List<Course> vocabularySupportedCourses = courseRepository.findAllVocabularySupportedCourses();
 
-        assertThat(vocabularySupportedCourses).hasSize(4);
+        assertThat(vocabularySupportedCourses).hasSizeGreaterThanOrEqualTo(4);
     }
 }

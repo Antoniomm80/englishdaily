@@ -1,7 +1,7 @@
 package com.anmoma.englishdaily.documentreader;
 
 import com.anmoma.englishdaily.Fixtures;
-import com.anmoma.englishdaily.catalog.CourseRepository;
+import com.anmoma.englishdaily.catalog.course.CourseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
