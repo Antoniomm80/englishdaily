@@ -41,7 +41,7 @@ public class GoogleDriveFolderReader implements FolderReader {
      * @return List of filenames in the folder
      */
     @Override
-    public List<String> getFilenamesFromFolder(String path) {
+    public List<String> getResourceIdsFromFolder(String path) {
         log.info("Getting filenames from Google Drive folder: {}", path);
         try {
             String folderId = resolveFolderPath(path);// Ensure the folder path is resolved to an ID
@@ -62,6 +62,38 @@ public class GoogleDriveFolderReader implements FolderReader {
             }
             return files.stream()
                         .map(File::getId)
+                        .toList();
+        } catch (GoogleJsonResponseException e) {
+            log.warn("Google Drive API error while getting filenames from folder {}: {}", path, e.getDetails()
+                                                                                                 .getMessage());
+            return Collections.emptyList(); // Return empty list on error
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to get filenames from Google Drive folder", e);
+        }
+    }
+
+    @Override
+    public List<String> getFilenamesFromFolder(String path) {
+        log.info("Getting filenames from Google Drive folder: {}", path);
+        try {
+            String folderId = resolveFolderPath(path);// Ensure the folder path is resolved to an ID
+            // Query to find all files in the specified folder that are not trashed
+            String query = "'" + folderId + "' in parents and trashed = false";
+
+            // Execute the query
+            FileList result = driveService.files()
+                                          .list()
+                                          .setQ(query)
+                                          .setFields("files(id, name,mimeType)")
+                                          .execute();
+
+            List<File> files = result.getFiles();
+            if (files == null || files.isEmpty()) {
+                log.debug("No files found in Google Drive folder: {}", path);
+                return Collections.emptyList();
+            }
+            return files.stream()
+                        .map(File::getName)
                         .toList();
         } catch (GoogleJsonResponseException e) {
             log.warn("Google Drive API error while getting filenames from folder {}: {}", path, e.getDetails()

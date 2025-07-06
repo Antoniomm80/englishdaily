@@ -37,7 +37,7 @@ public class IngestionPipeline {
         allCourses.stream()
                   .map(Course::getFolderPath)
                   .forEach(folder -> {
-                      List<String> filesList = folderReader.getFilenamesFromFolder(folder);
+                      List<String> filesList = folderReader.getResourceIdsFromFolder(folder);
                       filesList.forEach(f -> {
 
                           log.debug("Reading file {}", f);

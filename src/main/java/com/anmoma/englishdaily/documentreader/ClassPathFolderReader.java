@@ -15,7 +15,7 @@ public class ClassPathFolderReader implements FolderReader {
     private static final String DOCUMENTS_FOLDER = "documents/";
 
     @Override
-    public List<String> getFilenamesFromFolder(String dir) {
+    public List<String> getResourceIdsFromFolder(String dir) {
         if (!dir.startsWith(DOCUMENTS_FOLDER)) {
             dir = DOCUMENTS_FOLDER + dir;
         }
@@ -30,6 +30,11 @@ public class ClassPathFolderReader implements FolderReader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<String> getFilenamesFromFolder(String dir) {
+        return getResourceIdsFromFolder(dir);
     }
 
     @Override

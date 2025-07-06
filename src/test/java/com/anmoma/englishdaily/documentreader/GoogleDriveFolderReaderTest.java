@@ -20,8 +20,8 @@ class GoogleDriveFolderReaderTest {
 
     @Test
     @DisplayName("Dado un path de carpeta de Google Drive, el servicio debe recuperar los identificadores de los archivos")
-    void givenAGDriveFolderIdShouldServiceRetrieveFilenames() {
-        List<String> filenamesFromFolder = googleDriveFolderReader.getFilenamesFromFolder("advancedgrammarchallenge");
+    void givenAGDriveFolderIdShouldServiceRetrieveResourceIds() {
+        List<String> filenamesFromFolder = googleDriveFolderReader.getResourceIdsFromFolder("advancedgrammarchallenge");
         assertThat(filenamesFromFolder).isNotEmpty()
                                        .hasSize(13)
                                        .containsAll(List.of("1u1J0PcJicu_FZt4Z715eIqyN4cE8WKGR", "1mAtdJ26iHCEo4nkMAQ8c8qQO3e004ATU",
@@ -31,6 +31,22 @@ class GoogleDriveFolderReaderTest {
                                                "13ye6rRtlh4JLClq1vCvo0NhMNNbSWpD1", "1IvTeUzyLq0LEm4VLyksgp2YBXKbXoUFi",
                                                "1KMnI6eQFdKrssQw1NGwKurKjtLndHnL6", "1VPqNiPc2UN5CTxiMS6gDiU1u_G32E_PQ",
                                                "1iTktF_VwcbzRYuNqRrjme0nScUzOLguC"));
+    }
+
+    @Test
+    @DisplayName("Dado un path de carpeta de Google Drive, el servicio debe recuperar los nombres de los archivos")
+    void givenAGDriveFolderIdShouldServiceRetrieveFilenames() {
+        List<String> filenamesFromFolder = googleDriveFolderReader.getFilenamesFromFolder("advancedgrammarchallenge");
+        assertThat(filenamesFromFolder).isNotEmpty()
+                                       .hasSize(13)
+                                       .containsAll(
+                                               List.of("Advanced Grammar - Section 14 (Summary).pdf", "Advanced Grammar - Section 13 (Summary).pdf",
+                                                       "Advanced Grammar - Section 12 (Summary).pdf", "Advanced Grammar - Section 11 (Summary).pdf",
+                                                       "Advanced Grammar - Section 9 (Summary).pdf", "Advanced Grammar - Section 8 (Summary).pdf",
+                                                       "Advanced Grammar - Section 7 (Summary).pdf", "Advanced Grammar - Section 6 (Summary).pdf",
+                                                       "Advanced Grammar - Section 5 (Summary).pdf", "Advanced Grammar - Section 4 (Summary).pdf",
+                                                       "Advanced Grammar - Section 3 (Summary).pdf", "Advanced Grammar - Section 2 (Summary).pdf",
+                                                       "Advanced Grammar - Section 1 (Summary).pdf"));
     }
 
     @Test
