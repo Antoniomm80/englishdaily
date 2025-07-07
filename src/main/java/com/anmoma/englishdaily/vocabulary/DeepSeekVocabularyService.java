@@ -1,14 +1,14 @@
 package com.anmoma.englishdaily.vocabulary;
 
 import com.anmoma.englishdaily.LlmNotAvailableException;
-import com.anmoma.englishdaily.chatclient.SimpleLoggerAdvisor;
 import com.anmoma.englishdaily.documentreader.FilenameProvider;
 import com.anmoma.englishdaily.vectorstore.QuestionAwserAdvisorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.ai.vectorstore.filter.Filter;
 import org.springframework.beans.factory.annotation.Value;

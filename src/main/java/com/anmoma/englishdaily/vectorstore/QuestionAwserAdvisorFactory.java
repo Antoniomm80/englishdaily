@@ -1,6 +1,6 @@
 package com.anmoma.englishdaily.vectorstore;
 
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.ai.vectorstore.filter.Filter;
@@ -19,20 +19,24 @@ public class QuestionAwserAdvisorFactory {
     }
 
     public QuestionAnswerAdvisor createAdvisorWithQuerySimilarityThresholdAndTopK(String query, double threshold, int topK) {
-        return new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
-                                                                   .query(query)
-                                                                   .similarityThreshold(threshold)
-                                                                   .topK(topK)
-                                                                   .build());
+        return QuestionAnswerAdvisor.builder(vectorStore)
+                                    .searchRequest(SearchRequest.builder()
+                                                                .query(query)
+                                                                .similarityThreshold(threshold)
+                                                                .topK(topK)
+                                                                .build())
+                                    .build();
     }
 
     public QuestionAnswerAdvisor createAdvisorWithQuerySimilarityThresholdTopKAndFilterExpression(String query, double threshold, int topK,
             Filter.Expression filterExpression) {
-        return new QuestionAnswerAdvisor(vectorStore, SearchRequest.builder()
-                                                                   .query(query)
-                                                                   .similarityThreshold(threshold)
-                                                                   .topK(topK)
-                                                                   .filterExpression(filterExpression)
-                                                                   .build());
+        return QuestionAnswerAdvisor.builder(vectorStore)
+                                    .searchRequest(SearchRequest.builder()
+                                                                .query(query)
+                                                                .similarityThreshold(threshold)
+                                                                .topK(topK)
+                                                                .filterExpression(filterExpression)
+                                                                .build())
+                                    .build();
     }
 }

@@ -1,9 +1,9 @@
 package com.anmoma.englishdaily.askllama;
 
 import com.anmoma.englishdaily.LlmNotAvailableException;
-import com.anmoma.englishdaily.chatclient.SimpleLoggerAdvisor;
 import com.anmoma.englishdaily.vectorstore.QuestionAwserAdvisorFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
