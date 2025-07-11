@@ -27,6 +27,6 @@ public class VectorStoreItem {
         if (metadata == null) {
             return "";
         }
-        return metadata.getFileName();
+        return metadata.fileName();
     }
 }
