@@ -3,7 +3,6 @@ package com.anmoma.englishdaily.vocabulary;
 import com.anmoma.englishdaily.IntegrationTest;
 import com.anmoma.englishdaily.vectorstore.IngestionPipeline;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,7 +23,6 @@ class VocabularyServiceTest {
     }
 
     @Test
-    @Disabled
     void ingestionPipelineShouldIterateThroughDocumentsFolder() {
         VocabularyTerm dailyVocabulary = vocabularyService.getDailyVocabulary(List.of("yonks", "epic", "crush", "crash"));
         System.out.println(dailyVocabulary);

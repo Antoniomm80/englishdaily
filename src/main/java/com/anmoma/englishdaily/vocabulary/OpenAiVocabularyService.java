@@ -42,7 +42,15 @@ public class OpenAiVocabularyService implements VocabularyService {
             Please respond only with a json payload containing the word picked up and its definition, part of speech, pronunciation, and an example sentence. If applicable, include common collocations and synonyms if makes sense.                     
             """;
     private static final String USER_REQUEST = """
-            Get one random term from vocabulary bank
+            Get one random term from vocabulary bank list below, not the first one but one of the terms in the list.
+            The terms can be found under the section named "Vocabulary Bank" or "Vocabulary List" or similar and can be labelled as follows:
+            - idiom which stands for idiom
+            - n which stands for noun
+            - v which stands for verb
+            - adj which stands for adjective
+            - adv which stands for adverb
+            - abrv which stands for abbreviation
+            - phr v which stands for phrasal verb          
             """;
 
     private final QuestionAwserAdvisorFactory questionAwserAdvisorFactory;

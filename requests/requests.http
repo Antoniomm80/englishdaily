@@ -23,9 +23,11 @@ GET http://controlplane.local/english-daily/api/v1/englishdaily/grammar?grammarL
 
 
 ### Post Vocabulary lesson
-POST http://controlplane.local/api/v1/englishdaily/grammar-lessons
+POST http://controlplane.local/api/v1/englishdaily/courses
 Content-Type: application/json;charset=UTF-8
 
 {
-  "question": "Show me ten prhasal verbs related with family and relationships"
+  "title": "Business Listening Challenge",
+  "folderPath": "businesslisteningchallenge",
+  "vocabularySupported": true
 }

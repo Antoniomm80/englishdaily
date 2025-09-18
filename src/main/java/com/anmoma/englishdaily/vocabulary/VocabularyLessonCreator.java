@@ -5,9 +5,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.stream.IntStream.range;
 
 @Service
 public class VocabularyLessonCreator {
@@ -25,8 +24,13 @@ public class VocabularyLessonCreator {
 
     @Scheduled(cron = "0 0 7 * * *")
     public void generateVocabularyLesson() {
-        List<VocabularyTerm> vocabularyTerms = range(0, maxVocabularyTerms).mapToObj(i -> vocabularyService.getDailyVocabulary())
-                                                                           .toList();
+        List<String> blacklist = new ArrayList<>();
+        List<VocabularyTerm> vocabularyTerms = new ArrayList<>();
+        for (int i = 0; i < maxVocabularyTerms; i++) {
+            VocabularyTerm dailyVocabulary = vocabularyService.getDailyVocabulary(blacklist);
+            vocabularyTerms.add(dailyVocabulary);
+            blacklist.add(dailyVocabulary.word());
+        }
         applicationEventPublisher.publishEvent(new VocabularyLessonCreated(vocabularyTerms));
     }
 }
