@@ -55,13 +55,18 @@ public class IngestionPipeline {
     private List<Document> readResource(String path, Resource resource) {
         try {
 
-            return documentReader.readResource(resource);
-            //List<Document> enrichedDocuments = keywordEnricher.enrichDocuments(documentsToAdd);
-
+            List<Document> documents = documentReader.readResource(resource);
+            documents.forEach(d -> decorateDocumentMetadata(d, path));
+            return documents;
         } catch (AssertionError e) {
             log.error("Error reading file {}", path, e);
         }
         return List.of();
+    }
+
+    private void decorateDocumentMetadata(Document document, String fileuuid) {
+        document.getMetadata()
+                .put("fileuuid", fileuuid);
     }
 
 }

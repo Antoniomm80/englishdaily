@@ -14,6 +14,6 @@ public class VectorStoreItemRepositoryImpl implements VectorStoreItemRepository 
 
     @Override
     public List<VectorStoreItem> findItemsByFileName(String fileName) {
-        return vectorStoreItemJpaRepository.findByMetadataFileName(fileName);
+        return vectorStoreItemJpaRepository.findByMetadataFileUuid(fileName);
     }
 }

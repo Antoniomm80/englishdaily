@@ -14,4 +14,11 @@ public interface VectorStoreItemJpaRepository extends JpaRepository<VectorStoreI
             WHERE metadata ->> 'file_name' = :fileName
             """, nativeQuery = true)
     List<VectorStoreItem> findByMetadataFileName(@Param("fileName") String fileName);
+
+    @Query(value = """
+            SELECT *
+            FROM vector_store
+            WHERE metadata ->> 'fileuuid' = :fileuuid
+            """, nativeQuery = true)
+    List<VectorStoreItem> findByMetadataFileUuid(@Param("fileuuid") String fileuuid);
 }
