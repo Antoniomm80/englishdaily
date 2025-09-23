@@ -3,12 +3,14 @@ package com.anmoma.englishdaily.documentreader;
 import com.anmoma.englishdaily.catalog.course.CourseRepository;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 
 @Service
 public class FilenameProvider {
     private final FolderReader folderReader;
     private final CourseRepository courseRepository;
+    private static final SecureRandom random = new SecureRandom();
 
     public FilenameProvider(FolderReader folderReader, CourseRepository courseRepository) {
         this.folderReader = folderReader;
@@ -21,7 +23,7 @@ public class FilenameProvider {
                                                  .flatMap(course -> folderReader.getFilenamesFromFolder(course.getFolderPath())
                                                                                 .stream())
                                                  .toList();
-        return documents.get((int) (Math.random() * documents.size()));
+        return documents.get(random.nextInt(documents.size()));
     }
 
 }
