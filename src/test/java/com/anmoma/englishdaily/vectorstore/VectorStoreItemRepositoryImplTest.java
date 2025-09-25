@@ -15,7 +15,7 @@ class VectorStoreItemRepositoryImplTest {
     @Autowired
     private IngestionPipeline ingestionPipeline;
     @Autowired
-    private VectorStoreItemRepository vectorStoreItemRepository;
+    private VectorStoreItemJpaRepository vectorStoreItemRepository;
 
     @BeforeEach
     void setUp() {
@@ -25,7 +25,7 @@ class VectorStoreItemRepositoryImplTest {
     @Test
     @DisplayName("Busqueda por nombre de fichero debe devolver registros")
     void givenSearchByMetadataFilenameShouldReturnRegisters() {
-        List<VectorStoreItem> vectorStoreItems = vectorStoreItemRepository.findItemsByFileName("Advanced Grammar - Section 2 (Summary).pdf");
+        List<VectorStoreItem> vectorStoreItems = vectorStoreItemRepository.findByMetadataFileName("Advanced Grammar - Section 2 (Summary).pdf");
         assertThat(vectorStoreItems).isNotEmpty()
                                     .allSatisfy(vectorStoreItem -> {
                                         assertThat(vectorStoreItem.getFileName()).isEqualTo("Advanced Grammar - Section 2 (Summary).pdf");
