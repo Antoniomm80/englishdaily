@@ -23,11 +23,11 @@ GET http://controlplane.local/english-daily/api/v1/englishdaily/grammar?grammarL
 
 
 ### Post Vocabulary lesson
-POST http://controlplane.local/api/v1/englishdaily/courses
+POST http://controlplane.local/english-daily/api/v1/englishdaily/courses
 Content-Type: application/json;charset=UTF-8
 
 {
-  "title": "Business Listening Challenge",
-  "folderPath": "businesslisteningchallenge",
+  "title": "Advanced Vocabulary Challenge",
+  "folderPath": "advancedvocabularychallenge",
   "vocabularySupported": true
 }

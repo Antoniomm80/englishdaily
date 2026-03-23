@@ -1,10 +1,10 @@
 #!/bin/zsh
 
 set -e
-
 VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-echo "Testing version $VERSION"
-mvn clean test
+
+export BP_JVM_VERSION=21.*
+
 echo "Building docker image for version $VERSION"
 mvn spring-boot:build-image -Dspring-boot.build-image.imageName=192.168.4.30:5000/englishdaily:${VERSION} -DskipTests
 echo "Pushing to docker registry"

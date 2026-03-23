@@ -13,16 +13,12 @@ import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.vectorstore.filter.Filter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-@Service
-@ConditionalOnProperty(value = "englishdaily.chat-service.llm-model", havingValue = "none")
 public class OpenAiVocabularyService implements VocabularyService {
     private static final Logger log = LoggerFactory.getLogger(OpenAiVocabularyService.class);
     private static final String SYSTEM_PROMPT = """            
