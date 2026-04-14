@@ -45,6 +45,9 @@ public class GoogleDriveFolderReader implements FolderReader {
         log.info("Getting filenames from Google Drive folder: {}", path);
         try {
             String folderId = resolveFolderPath(path);// Ensure the folder path is resolved to an ID
+            if (folderId == null) {
+                return Collections.emptyList();
+            }
             // Query to find all files in the specified folder that are not trashed
             String query = "'" + folderId + "' in parents and trashed = false";
 
@@ -77,6 +80,9 @@ public class GoogleDriveFolderReader implements FolderReader {
         log.info("Getting filenames from Google Drive folder: {}", path);
         try {
             String folderId = resolveFolderPath(path);// Ensure the folder path is resolved to an ID
+            if (folderId == null) {
+                return Collections.emptyList();
+            }
             // Query to find all files in the specified folder that are not trashed
             String query = "'" + folderId + "' in parents and trashed = false";
 
@@ -120,7 +126,8 @@ public class GoogleDriveFolderReader implements FolderReader {
 
             List<File> folders = folderList.getFiles();
             if (folders.isEmpty()) {
-                return null; // Folder not found
+                log.warn("Google Drive folder segment '{}' not found under parent {}, skipping folder", segment, currentParentId);
+                return null;
             }
 
             // If multiple folders have same name, we use the first

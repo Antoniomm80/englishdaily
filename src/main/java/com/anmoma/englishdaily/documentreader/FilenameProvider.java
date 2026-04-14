@@ -17,13 +17,26 @@ public class FilenameProvider {
         this.courseRepository = courseRepository;
     }
 
-    public String getRandomFilenameFromDocumentsFolder() {
-        List<String> documents = courseRepository.findAllVocabularySupportedCourses()
-                                                 .stream()
-                                                 .flatMap(course -> folderReader.getFilenamesFromFolder(course.getFolderPath())
-                                                                                .stream())
-                                                 .toList();
+    public List<SelectedDocument> getAllSelectedDocuments() {
+        List<SelectedDocument> documents = courseRepository.findAllVocabularySupportedCourses()
+                                                           .stream()
+                                                           .flatMap(course -> folderReader.getFilenamesFromFolder(course.getFolderPath())
+                                                                                          .stream()
+                                                                                          .map(filename -> new SelectedDocument(filename, course.getFolderPath())))
+                                                           .toList();
+        if (documents.isEmpty()) {
+            throw new IllegalStateException("No vocabulary documents available across all supported courses");
+        }
+        return documents;
+    }
+
+    public SelectedDocument getRandomSelectedDocument() {
+        List<SelectedDocument> documents = getAllSelectedDocuments();
         return documents.get(random.nextInt(documents.size()));
+    }
+
+    public String getRandomFilenameFromDocumentsFolder() {
+        return getRandomSelectedDocument().filename();
     }
 
 }
